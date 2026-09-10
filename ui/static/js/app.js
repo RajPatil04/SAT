@@ -155,6 +155,11 @@ document.addEventListener("DOMContentLoaded", () => {
   setupQueryChips();
   setupDropzone();
   setupAnalyzeButton();
+  setupComparisonSlider();
+  setupOpacitySlider();
+  setupPixelInspector();
+  setupExportButtons();
+  setupKeyboardShortcuts();
   loadModeData(SatQueryState.currentMode);
 });
 
@@ -367,10 +372,85 @@ function renderAgentPanel(data) {
 
 // Render Results Panel
 function renderResultsPanel(data) {
-  // Answer
-  document.getElementById("answerText").textContent = data.answer;
+  // 1. Answer & Latency
+  const answerEl = document.getElementById("answerText");
+  if (answerEl) answerEl.textContent = data.answer;
 
-  // Visual Evidence Main Image
+  const latencyVal = Math.round(data.latency_ms || 108);
+  const latencyEl = document.getElementById("latencyValueText");
+  if (latencyEl) latencyEl.textContent = `${latencyVal} ms`;
+
+  // 2. Telemetry Bar & Sensor Pills
+  const telemGsd = document.getElementById("telemGsd");
+  if (telemGsd) telemGsd.textContent = data.dimensions ? "10m / px" : "10m / px";
+
+  const telemCloud = document.getElementById("telemCloud");
+  if (telemCloud) {
+    telemCloud.textContent = SatQueryState.currentMode === "optical_sar" ? "Cloud-Penetrated" : "< 1.8%";
+  }
+
+  const telemModel = document.getElementById("telemModel");
+  if (telemModel) telemModel.textContent = data.model;
+
+  const sensorNameText = document.getElementById("sensorNameText");
+  if (sensorNameText) {
+    if (SatQueryState.currentMode === "bi_temporal") {
+      sensorNameText.textContent = "Sentinel-2 Multi-Epoch";
+    } else if (SatQueryState.currentMode === "optical_sar") {
+      sensorNameText.textContent = "Sentinel-2 + Sentinel-1";
+    } else {
+      sensorNameText.textContent = "Sentinel-2A MSI";
+    }
+  }
+
+  // 3. Stage View Toggling (Single vs Swipe Comparison)
+  const standardView = document.getElementById("standardEvidenceView");
+  const sliderStage = document.getElementById("comparisonSliderStage");
+  const modeBadge = document.getElementById("evidenceViewModeBadge");
+  const opacityToolbar = document.getElementById("layerOpacityToolbar");
+
+  if (SatQueryState.currentMode === "bi_temporal") {
+    if (standardView) standardView.style.display = "none";
+    if (sliderStage) sliderStage.style.display = "block";
+    if (modeBadge) modeBadge.textContent = "Swipe Compare";
+    if (opacityToolbar) opacityToolbar.style.display = "none";
+
+    const beforeImg = document.getElementById("sliderBeforeImg");
+    const afterImg = document.getElementById("sliderAfterImg");
+    const beforeBadge = document.getElementById("sliderBeforeBadge");
+    const afterBadge = document.getElementById("sliderAfterBadge");
+
+    if (beforeImg) beforeImg.src = "/data/samples/bi_temporal/before.png";
+    if (afterImg) afterImg.src = "/data/samples/bi_temporal/after.png";
+    if (beforeBadge) beforeBadge.textContent = "2024 Baseline";
+    if (afterBadge) afterBadge.textContent = "2026 Epoch";
+
+    resetComparisonSlider();
+  } else if (SatQueryState.currentMode === "optical_sar") {
+    if (standardView) standardView.style.display = "none";
+    if (sliderStage) sliderStage.style.display = "block";
+    if (modeBadge) modeBadge.textContent = "Optical ⟷ SAR";
+    if (opacityToolbar) opacityToolbar.style.display = "none";
+
+    const beforeImg = document.getElementById("sliderBeforeImg");
+    const afterImg = document.getElementById("sliderAfterImg");
+    const beforeBadge = document.getElementById("sliderBeforeBadge");
+    const afterBadge = document.getElementById("sliderAfterBadge");
+
+    if (beforeImg) beforeImg.src = "/data/samples/optical_sar/optical.png";
+    if (afterImg) afterImg.src = "/data/samples/optical_sar/sar.png";
+    if (beforeBadge) beforeBadge.textContent = "Optical (S2)";
+    if (afterBadge) afterBadge.textContent = "SAR Radar (S1)";
+
+    resetComparisonSlider();
+  } else {
+    // Single image mode
+    if (standardView) standardView.style.display = "block";
+    if (sliderStage) sliderStage.style.display = "none";
+    if (modeBadge) modeBadge.textContent = "Multi-Band Layer";
+  }
+
+  // 4. Evidence Thumbnails Row
   const evidenceList = data.evidence || [];
   SatQueryState.activeEvidenceIndex = 0;
 
@@ -378,7 +458,6 @@ function renderResultsPanel(data) {
     setEvidenceImage(evidenceList[0]);
   }
 
-  // Evidence Thumbnails
   const thumbRow = document.getElementById("evidenceThumbnailsRow");
   if (thumbRow) {
     thumbRow.innerHTML = "";
@@ -399,25 +478,16 @@ function renderResultsPanel(data) {
     });
   }
 
-  // Detected Land Cover Legend
-  const legendBox = document.getElementById("detectedLandCoverList");
-  if (legendBox) {
-    legendBox.innerHTML = "";
-    (data.detected_land_cover || []).forEach(item => {
-      const row = document.createElement("div");
-      row.className = "legend-item";
-      row.innerHTML = `
-        <span class="legend-dot" style="background-color: ${item.color}"></span>
-        <span>${item.label} (${item.percentage}%)</span>
-      `;
-      legendBox.appendChild(row);
-    });
-  }
+  // 5. Land Cover Donut Chart & Legend
+  renderLandCoverDonut(data.detected_land_cover || []);
 
-  // Confidence Meter
+  // 6. Confidence Meter
   const confVal = Math.round((data.confidence || 0.92) * 100);
-  document.getElementById("confidenceValueText").textContent = `${confVal}%`;
-  document.getElementById("confidenceLevelText").textContent = data.confidence_level || "High Confidence";
+  const confText = document.getElementById("confidenceValueText");
+  if (confText) confText.textContent = `${confVal}%`;
+
+  const confLevel = document.getElementById("confidenceLevelText");
+  if (confLevel) confLevel.textContent = data.confidence_level || "High Confidence";
 
   const circleBar = document.getElementById("confidenceCircleBar");
   if (circleBar) {
@@ -427,11 +497,15 @@ function renderResultsPanel(data) {
     circleBar.style.strokeDashoffset = offset;
   }
 
-  // Execution Trace List
+  // 7. Execution Trace List & Counter
   const traceList = document.getElementById("executionTraceList");
+  const traceCounter = document.getElementById("traceCounterBadge");
+  const traces = data.execution_trace || [];
+  if (traceCounter) traceCounter.textContent = `${traces.length} Steps Completed`;
+
   if (traceList) {
     traceList.innerHTML = "";
-    (data.execution_trace || []).forEach(tr => {
+    traces.forEach(tr => {
       const row = document.createElement("div");
       row.className = "trace-row";
       row.innerHTML = `
@@ -447,17 +521,319 @@ function renderResultsPanel(data) {
   }
 }
 
+// Display selected evidence layer with mask overlay blending
 function setEvidenceImage(ev) {
   const mainImg = document.getElementById("evidenceMainImg");
+  const overlayImg = document.getElementById("evidenceOverlayImg");
   const overlayTag = document.getElementById("evidenceOverlayTag");
+  const opacityToolbar = document.getElementById("layerOpacityToolbar");
+
+  const url = ev.url || (ev.file ? `/data/samples/${SatQueryState.currentMode}/${ev.file}` : "/data/samples/single_image/image.png");
 
   if (mainImg) {
-    const url = ev.url || (ev.file ? `/data/samples/${SatQueryState.currentMode}/${ev.file}` : "/data/samples/single_image/image.png");
     mainImg.src = url;
   }
 
   if (overlayTag) {
     overlayTag.textContent = ev.label || "Visual Evidence";
+  }
+
+  // Check if this layer is a segmentation or false-color mask overlay
+  const isMask = ev.id === "seg" || (ev.label && ev.label.toLowerCase().includes("segmentation"));
+  if (isMask && overlayImg && opacityToolbar && SatQueryState.currentMode === "single_image") {
+    overlayImg.src = url;
+    overlayImg.style.display = "block";
+    opacityToolbar.style.display = "flex";
+  } else if (overlayImg && opacityToolbar) {
+    overlayImg.style.display = "none";
+    opacityToolbar.style.display = "none";
+  }
+}
+
+// Interactive Swipe Comparison Slider Controller
+let isDraggingSlider = false;
+
+function setupComparisonSlider() {
+  const stage = document.getElementById("comparisonSliderStage");
+  const handle = document.getElementById("sliderHandle");
+  const dividerLine = document.getElementById("sliderDividerLine");
+
+  if (!stage || !handle || !dividerLine) return;
+
+  function updateSliderPosition(clientX) {
+    const rect = stage.getBoundingClientRect();
+    if (rect.width === 0) return;
+    let x = clientX - rect.left;
+    if (x < 0) x = 0;
+    if (x > rect.width) x = rect.width;
+    const pct = (x / rect.width) * 100;
+
+    const beforeBox = document.getElementById("sliderBeforeBox");
+    if (beforeBox) beforeBox.style.width = `${pct}%`;
+    if (dividerLine) dividerLine.style.left = `${pct}%`;
+  }
+
+  function onPointerDown(e) {
+    if (e.target.closest(".slider-badge")) return;
+    isDraggingSlider = true;
+    const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+    updateSliderPosition(clientX);
+  }
+
+  handle.addEventListener("mousedown", onPointerDown);
+  dividerLine.addEventListener("mousedown", onPointerDown);
+  stage.addEventListener("mousedown", onPointerDown);
+
+  window.addEventListener("mousemove", (e) => {
+    if (!isDraggingSlider) return;
+    updateSliderPosition(e.clientX);
+  });
+
+  window.addEventListener("mouseup", () => {
+    isDraggingSlider = false;
+  });
+
+  // Touch Support
+  handle.addEventListener("touchstart", (e) => {
+    isDraggingSlider = true;
+    if (e.touches && e.touches[0]) updateSliderPosition(e.touches[0].clientX);
+  }, { passive: true });
+
+  stage.addEventListener("touchstart", (e) => {
+    if (e.target.closest(".slider-badge")) return;
+    isDraggingSlider = true;
+    if (e.touches && e.touches[0]) updateSliderPosition(e.touches[0].clientX);
+  }, { passive: true });
+
+  window.addEventListener("touchmove", (e) => {
+    if (!isDraggingSlider || !e.touches || !e.touches[0]) return;
+    updateSliderPosition(e.touches[0].clientX);
+  }, { passive: true });
+
+  window.addEventListener("touchend", () => {
+    isDraggingSlider = false;
+  });
+}
+
+function resetComparisonSlider() {
+  const beforeBox = document.getElementById("sliderBeforeBox");
+  const dividerLine = document.getElementById("sliderDividerLine");
+  if (beforeBox) beforeBox.style.width = "50%";
+  if (dividerLine) dividerLine.style.left = "50%";
+}
+
+// Layer Opacity Blend Slider
+function setupOpacitySlider() {
+  const slider = document.getElementById("layerOpacitySlider");
+  const valText = document.getElementById("opacityValText");
+  const overlayImg = document.getElementById("evidenceOverlayImg");
+
+  if (!slider || !valText || !overlayImg) return;
+
+  slider.addEventListener("input", (e) => {
+    const val = e.target.value;
+    valText.textContent = `${val}%`;
+    overlayImg.style.opacity = val / 100;
+  });
+}
+
+// Interactive SVG Donut Chart Renderer
+function renderLandCoverDonut(landCoverList) {
+  const svg = document.getElementById("landCoverDonutSvg");
+  const centerVal = document.getElementById("donutCenterVal");
+  const centerLbl = document.getElementById("donutCenterLbl");
+  const legendBox = document.getElementById("detectedLandCoverList");
+
+  if (!svg || !legendBox) return;
+
+  // Clear previous segments
+  svg.querySelectorAll(".donut-segment").forEach(el => el.remove());
+  legendBox.innerHTML = "";
+
+  const radius = 38;
+  const circumference = 2 * Math.PI * radius; // ~238.76
+  let accumulatedOffset = 0;
+
+  landCoverList.forEach((item, index) => {
+    const pct = item.percentage;
+    const strokeDash = (pct / 100) * circumference;
+    const strokeGap = circumference - strokeDash;
+
+    // Create SVG Circle segment
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("cx", "50");
+    circle.setAttribute("cy", "50");
+    circle.setAttribute("r", radius);
+    circle.setAttribute("class", "donut-segment");
+    circle.setAttribute("stroke", item.color);
+    circle.setAttribute("stroke-dasharray", `${strokeDash} ${strokeGap}`);
+    circle.setAttribute("stroke-dashoffset", -accumulatedOffset);
+
+    accumulatedOffset += strokeDash;
+
+    // Legend item
+    const row = document.createElement("div");
+    row.className = "legend-item";
+    row.id = `legend-item-${index}`;
+    row.innerHTML = `
+      <span class="legend-dot" style="background-color: ${item.color}"></span>
+      <span>${item.label} (${pct}%)</span>
+    `;
+
+    // Interactive Hover Coupling between Donut & Legend
+    function onHover() {
+      if (centerVal) {
+        centerVal.textContent = `${pct}%`;
+        centerVal.style.color = item.color;
+      }
+      if (centerLbl) centerLbl.textContent = item.label;
+      row.style.background = "rgba(255, 255, 255, 0.1)";
+      circle.style.strokeWidth = "15";
+    }
+
+    function onLeave() {
+      if (centerVal) {
+        centerVal.textContent = "100%";
+        centerVal.style.color = "#ffffff";
+      }
+      if (centerLbl) centerLbl.textContent = "Total Area";
+      row.style.background = "";
+      circle.style.strokeWidth = "12";
+    }
+
+    circle.addEventListener("mouseenter", onHover);
+    circle.addEventListener("mouseleave", onLeave);
+    row.addEventListener("mouseenter", onHover);
+    row.addEventListener("mouseleave", onLeave);
+
+    svg.appendChild(circle);
+    legendBox.appendChild(row);
+  });
+}
+
+// Live Pixel Inspector HUD
+function setupPixelInspector() {
+  const stage = document.getElementById("standardEvidenceView");
+  const sliderStage = document.getElementById("comparisonSliderStage");
+  const coordsText = document.getElementById("hudCoordsText");
+  const classVal = document.getElementById("hudClassVal");
+
+  function handleMouseMove(e, targetEl) {
+    const rect = targetEl.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+
+    const normX = (e.clientX - rect.left) / rect.width;
+    const normY = (e.clientY - rect.top) / rect.height;
+
+    // Compute realistic coordinate grid offsets
+    const baseLat = 34.0522;
+    const baseLon = -118.2437;
+    const lat = (baseLat + (0.5 - normY) * 0.042).toFixed(4);
+    const lon = (baseLon + (normX - 0.5) * 0.054).toFixed(4);
+
+    if (coordsText) {
+      coordsText.textContent = `${lat}° N, ${Math.abs(lon)}° W`;
+    }
+
+    // Determine simulated land classification based on position
+    if (classVal) {
+      if (normY > 0.4 && normY < 0.65 && normX > 0.3 && normX < 0.7) {
+        classVal.textContent = "Water Body (Specular)";
+        classVal.style.color = "#38bdf8";
+      } else if (normX > 0.6) {
+        classVal.textContent = "Urban / Built-up (94%)";
+        classVal.style.color = "#f97316";
+      } else {
+        classVal.textContent = "Vegetation (NIR: 0.84)";
+        classVal.style.color = "#4ade80";
+      }
+    }
+  }
+
+  if (stage) {
+    stage.addEventListener("mousemove", (e) => handleMouseMove(e, stage));
+  }
+  if (sliderStage) {
+    sliderStage.addEventListener("mousemove", (e) => handleMouseMove(e, sliderStage));
+  }
+}
+
+// Export Intelligence Report & Annotated Image Actions
+function setupExportButtons() {
+  const exportImgBtn = document.getElementById("exportImgBtn");
+  const exportReportBtn = document.getElementById("exportReportBtn");
+
+  if (exportImgBtn) {
+    exportImgBtn.addEventListener("click", () => {
+      const activeImg = document.getElementById("evidenceMainImg") || document.getElementById("previewImgThumb");
+      if (!activeImg) return;
+      const link = document.createElement("a");
+      link.href = activeImg.src;
+      link.download = `SatQuery_${SatQueryState.currentMode}_${Date.now()}.png`;
+      link.click();
+    });
+  }
+
+  if (exportReportBtn) {
+    exportReportBtn.addEventListener("click", () => {
+      const mode = SatQueryState.currentMode;
+      const data = SatQueryState.sampleData[mode] || LOCAL_SAMPLE_FALLBACKS[mode];
+      const timestamp = new Date().toISOString();
+
+      const reportContent = `=====================================================
+SATQUERY AI - EARTH OBSERVATION INTELLIGENCE DOSSIER
+Generated: ${timestamp}
+Mode: ${mode.toUpperCase()}
+=====================================================
+
+[TARGET ACQUISITION]
+Platform: Sentinel-2A / Sentinel-1 C-SAR
+Acquisition Date: ${data.acquisition_date || "2024-05-15"}
+Format: ${data.format || "GeoTIFF (RGB+NIR)"}
+Resolution: ${data.dimensions || "1024x1024 (10m GSD)"}
+
+[OPERATOR QUERY]
+"${SatQueryState.currentQuery}"
+
+[AGENTIC WORKFLOW]
+Selected Specialist: ${data.model}
+Task Classification: ${data.task}
+Confidence Score: ${Math.round((data.confidence || 0.92) * 100)}% (${data.confidence_level || "High Confidence"})
+Inference Latency: ${Math.round(data.latency_ms || 108)} ms
+
+[SYNTHESIZED GEOSPATIAL FINDINGS]
+${data.answer}
+
+[LAND COVER BREAKDOWN]
+${(data.detected_land_cover || []).map(item => `• ${item.label}: ${item.percentage}%`).join("\n")}
+
+[END OF DOSSIER - SATQUERY AI 2026]
+`;
+
+      const blob = new Blob([reportContent], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `SatQuery_Report_${mode}_${Date.now()}.txt`;
+      link.click();
+      URL.revokeObjectURL(url);
+    });
+  }
+}
+
+// Keyboard shortcuts (Ctrl+Enter to run analysis)
+function setupKeyboardShortcuts() {
+  window.addEventListener("keydown", (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+      e.preventDefault();
+      runAnalysisWorkflow();
+    }
+  });
+
+  const previewThumbWrap = document.getElementById("previewThumbWrap");
+  const filePickerInput = document.getElementById("filePickerInput");
+  if (previewThumbWrap && filePickerInput) {
+    previewThumbWrap.addEventListener("click", () => filePickerInput.click());
   }
 }
 
@@ -477,8 +853,14 @@ async function runAnalysisWorkflow() {
 
   const btn = document.getElementById("analyzeSubmitBtn");
   const originalBtnText = btn.innerHTML;
-  btn.innerHTML = `<svg class="spin" style="width:16px;height:16px;animation:spin 1s linear infinite;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="3" stroke-dasharray="32" stroke-dashoffset="12"></circle></svg> Analyzing Satellite Data...`;
+  btn.innerHTML = `<svg class="spin" style="width:16px;height:16px;animation:spin 1s linear infinite;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="3" stroke-dasharray="32" stroke-dashoffset="12"></circle></svg> Analyzing Scene...`;
   btn.style.opacity = "0.85";
+
+  // Trigger glowing radar scanline sweep
+  const scanline1 = document.getElementById("radarScanline");
+  const scanline2 = document.getElementById("radarScanlineSlider");
+  if (scanline1) scanline1.classList.add("scanning");
+  if (scanline2) scanline2.classList.add("scanning");
 
   // Reset Steppers to Pending
   const steps = [
@@ -499,7 +881,7 @@ async function runAnalysisWorkflow() {
       ind.innerHTML = `<span style="font-size:10px;">●</span>`;
       if (tag) tag.textContent = "Processing...";
     }
-    await new Promise(r => setTimeout(r, 280));
+    await new Promise(r => setTimeout(r, 260));
 
     if (stepEl) {
       const ind = stepEl.querySelector(".step-indicator");
@@ -535,6 +917,10 @@ async function runAnalysisWorkflow() {
     console.warn("Analysis using local provider:", err);
     loadModeData(SatQueryState.currentMode);
   }
+
+  // Turn off radar scanline
+  if (scanline1) scanline1.classList.remove("scanning");
+  if (scanline2) scanline2.classList.remove("scanning");
 
   SatQueryState.isAnalyzing = false;
   btn.innerHTML = originalBtnText;
