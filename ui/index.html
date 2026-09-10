@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SatQuery AI - Ask • Analyze • Understand Earth</title>
+  <meta name="description" content="SatQuery AI is an agentic remote-sensing AI platform for satellite imagery VQA, change analysis, and optical-SAR cross-modal understanding.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div class="app-container">
+  <!-- TOP HEADER with realistic Earth horizon and orbiting satellite -->
+  <header class="top-header">
+    <div class="header-left">
+      <div class="logo-badge">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="8"></circle>
+          <ellipse cx="12" cy="12" rx="11" ry="4" transform="rotate(-30 12 12)"></ellipse>
+          <circle cx="19" cy="8" r="1.5" fill="#38bdf8"></circle>
+        </svg>
+      </div>
+      <div class="brand-info">
+        <h1 class="brand-title">SatQuery AI</h1>
+        <span class="brand-tagline">Ask • Analyze • Understand Earth</span>
+      </div>
+    </div>
+
+    <!-- Orbiting Satellite Graphic in Header Atmosphere -->
+    <div class="orbiting-satellite" title="Orbital Sensor S-2A">
+      <svg viewBox="0 0 46 24" fill="none">
+        <rect x="18" y="7" width="10" height="10" rx="1.5" fill="#e2e8f0" stroke="#38bdf8" stroke-width="1.2"/>
+        <rect x="2" y="8.5" width="14" height="7" rx="1" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1"/>
+        <line x1="7" y1="8.5" x2="7" y2="15.5" stroke="#93c5fd" stroke-width="0.8"/>
+        <line x1="11" y1="8.5" x2="11" y2="15.5" stroke="#93c5fd" stroke-width="0.8"/>
+        <rect x="30" y="8.5" width="14" height="7" rx="1" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1"/>
+        <line x1="35" y1="8.5" x2="35" y2="15.5" stroke="#93c5fd" stroke-width="0.8"/>
+        <line x1="39" y1="8.5" x2="39" y2="15.5" stroke="#93c5fd" stroke-width="0.8"/>
+        <circle cx="23" cy="12" r="2" fill="#38bdf8"/>
+      </svg>
+    </div>
+
+    <div class="header-right">
+      <div class="status-pill" id="localDemoStatusPill">
+        <span class="status-dot"></span>
+        <span class="status-text-primary">Local Demo Mode</span>
+        <span class="status-text-secondary">Ready</span>
+      </div>
+      <button class="header-icon-btn" title="Settings" aria-label="Settings">
+        <svg style="width:18px;height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+      <button class="header-icon-btn" title="Operator Profile" aria-label="Profile">
+        <svg style="width:18px;height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- BODY CONTENT WITH FIXED SIDEBAR AND SCROLLABLE VIEWPORT -->
+  <div class="app-body">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+      <nav class="nav-menu">
+        <div class="nav-item active" data-view="analyze" id="navItemAnalyze">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 3h18v18H3z"></path>
+            <path d="m9 15 3-3 3 3"></path>
+            <path d="M12 9v6"></path>
+          </svg>
+          <span>Analyze</span>
+        </div>
+        <div class="nav-item" data-view="gallery" id="navItemGallery">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+          <span>Gallery</span>
+        </div>
+        <div class="nav-item" data-view="results" id="navItemResults">
+          <svg viewBox="0 0 24 24">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          <span>Results</span>
+        </div>
+        <div class="nav-item" data-view="trace" id="navItemTrace">
+          <svg viewBox="0 0 24 24">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          <span>Execution Trace</span>
+        </div>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-bottom-earth">
+          <div class="sidebar-satellite-orbit">
+            <svg viewBox="0 0 16 16" fill="#38bdf8">
+              <rect x="5" y="5" width="6" height="6" rx="1"/>
+              <line x1="1" y1="8" x2="5" y2="8" stroke="#ffffff" stroke-width="1.5"/>
+              <line x1="11" y1="8" x2="15" y2="8" stroke="#ffffff" stroke-width="1.5"/>
+            </svg>
+          </div>
+        </div>
+        <div class="sidebar-tagline">
+          From Satellite Data<br>to Actionable Insights
+        </div>
+      </div>
+    </aside>
+
+    <!-- CONTENT VIEWPORT -->
+    <main class="content-viewport">
+      
+      <!-- ============================================
+           VIEW 1: MAIN ANALYZE WORKSPACE (3 COLUMNS)
+           ============================================ -->
+      <section class="page-view active" id="view-analyze">
+        <div class="workspace-grid">
+          
+          <!-- LEFT COLUMN: SATELLITE INPUT -->
+          <div class="workspace-col">
+            <div class="panel-card">
+              <div class="card-header-block">
+                <div class="card-header-icon">
+                  <svg style="width:18px;height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="12" y1="18" x2="12" y2="12"></line>
+                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                  </svg>
+                </div>
+                <div class="card-title-group">
+                  <h2>Satellite Input</h2>
+                  <p>Upload your satellite data or choose from gallery</p>
+                </div>
+              </div>
+
+              <!-- Input Mode Selector -->
+              <div class="input-mode-label">Input Mode</div>
+              <div class="input-mode-tabs">
+                <div class="mode-tab-btn active" data-mode="single_image" id="modeBtnSingle">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor"/>
+                    <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
+                    <polyline points="21 15 16 10 5 21" stroke="currentColor"/>
+                  </svg>
+                  <span>Single Image</span>
+                </div>
+                <div class="mode-tab-btn" data-mode="bi_temporal" id="modeBtnBiTemporal">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="9" stroke="currentColor"/>
+                    <polyline points="12 6 12 12 16 14" stroke="currentColor"/>
+                  </svg>
+                  <span>Bi-temporal Pair</span>
+                </div>
+                <div class="mode-tab-btn" data-mode="optical_sar" id="modeBtnOpticalSar">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M2 12h20M12 2v20" stroke="currentColor"/>
+                    <circle cx="12" cy="12" r="6" stroke="currentColor"/>
+                  </svg>
+                  <span>Optical + SAR Pair</span>
+                </div>
+              </div>
+
+              <!-- Upload Drag & Drop Box -->
+              <div class="upload-dropzone" id="fileDropzone">
+                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <div class="upload-prompt">Drag & drop image here</div>
+                <div class="upload-or">or</div>
+                <button type="button" class="choose-file-btn">Choose File</button>
+                <input type="file" id="filePickerInput" style="display:none;" accept=".tif,.tiff,.png,.jpg,.jpeg">
+                <div class="supported-formats-text">Accepted formats: GeoTIFF, TIFF, PNG, JPEG</div>
+              </div>
+
+              <!-- Image Preview Block (Single Image) -->
+              <div class="preview-card-inner" id="singlePreviewBlock">
+                <div class="preview-header-bar">
+                  <div class="preview-header-title">
+                    <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                      <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    </svg>
+                    <span>Image Preview</span>
+                  </div>
+                </div>
+                <div class="preview-body-grid">
+                  <div class="preview-thumbnail-wrap">
+                    <img id="previewImgThumb" src="/data/samples/single_image/image.png" alt="Satellite Preview">
+                  </div>
+                  <div class="metadata-table">
+                    <div class="meta-row">
+                      <span class="meta-label">File:</span>
+                      <span class="meta-value accent" id="metaFileName">test_image.tif</span>
+                    </div>
+                    <div class="meta-row">
+                      <span class="meta-label">Format:</span>
+                      <span class="meta-value" id="metaFormat">GeoTIFF</span>
+                    </div>
+                    <div class="meta-row">
+                      <span class="meta-label">Dimensions:</span>
+                      <span class="meta-value" id="metaDimensions">1024 × 1024</span>
+                    </div>
+                    <div class="meta-row">
+                      <span class="meta-label">Bands:</span>
+                      <span class="meta-value" id="metaBands">4 (RGB + NIR)</span>
+                    </div>
+                    <div class="meta-row">
+                      <span class="meta-label">Modality:</span>
+                      <span class="meta-value" id="metaModality">Optical</span>
+                    </div>
+                    <div class="meta-row">
+                      <span class="meta-label">Acquisition Date:</span>
+                      <span class="meta-value" id="metaDate">2024-05-15</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dual Preview Block (Bi-temporal / Optical+SAR) -->
+              <div class="dual-preview-grid" id="dualPreviewBlock" style="display:none;">
+                <div class="dual-preview-box">
+                  <div class="dual-preview-label" id="dualLabel1">BEFORE (2024)</div>
+                  <img id="dualImg1" src="/data/samples/bi_temporal/before.png" alt="Before Observation">
+                </div>
+                <div class="dual-preview-box">
+                  <div class="dual-preview-label" id="dualLabel2">AFTER (2026)</div>
+                  <img id="dualImg2" src="/data/samples/bi_temporal/after.png" alt="After Observation">
+                </div>
+              </div>
+            </div>
+
+            <!-- Natural Language Query Box: Ask SatQuery AI -->
+            <div class="panel-card">
+              <div class="card-header-block">
+                <div class="card-header-icon">
+                  <svg style="width:18px;height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                </div>
+                <div class="card-title-group">
+                  <h2>Ask SatQuery AI</h2>
+                  <p>Enter your question about the satellite image</p>
+                </div>
+              </div>
+
+              <div class="query-box-container">
+                <div class="query-textarea-wrap">
+                  <textarea class="query-textarea" id="satQueryInput" placeholder="e.g. What land cover is visible in this image?">Describe the land cover and major objects visible in this image</textarea>
+                  <span class="char-counter" id="queryCharCount">63/500</span>
+                </div>
+
+                <div class="example-queries-section">
+                  <div class="example-chips-label">Example Queries:</div>
+                  <div class="example-chips-wrap" id="exampleChipsContainer">
+                    <!-- Dynamically populated per mode -->
+                  </div>
+                </div>
+
+                <button type="button" class="analyze-action-btn" id="analyzeSubmitBtn">
+                  <span>✦</span>
+                  <span>Analyze</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- CENTER COLUMN: SATQUERY AGENT -->
+          <div class="workspace-col">
+            <div class="panel-card" style="flex:1;">
+              <div class="card-header-block">
+                <div class="card-header-icon">
+                  <svg style="width:18px;height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polygon points="12 8 8 12 12 16 16 12 12 8"></polygon>
+                  </svg>
+                </div>
+                <div class="card-title-group">
+                  <h2>SatQuery Agent</h2>
+                  <p>Analyzing your query and selecting the best model...</p>
+                </div>
+              </div>
+
+              <!-- Agent Stepper Timeline -->
+              <div class="agent-stepper">
+                <div class="step-row" id="step-01">
+                  <div class="step-indicator done">✓</div>
+                  <div class="step-info-block">
+                    <span class="step-title">Input Validation</span>
+                    <span class="step-desc">Format, metadata, compatibility</span>
+                  </div>
+                  <span class="step-status-tag completed">Completed</span>
+                </div>
+
+                <div class="step-row" id="step-02">
+                  <div class="step-indicator done">✓</div>
+                  <div class="step-info-block">
+                    <span class="step-title">Query Understanding</span>
+                    <span class="step-desc">Identifying task type</span>
+                  </div>
+                  <span class="step-status-tag completed">Completed</span>
+                </div>
+
+                <div class="step-row" id="step-03">
+                  <div class="step-indicator done">✓</div>
+                  <div class="step-info-block">
+                    <span class="step-title">Model Selection</span>
+                    <span class="step-desc">Routing to specialist model</span>
+                  </div>
+                  <span class="step-status-tag completed">Completed</span>
+                </div>
+
+                <div class="step-row" id="step-04">
+                  <div class="step-indicator active">●</div>
+                  <div class="step-info-block">
+                    <span class="step-title">Analysis Ready</span>
+                    <span class="step-desc">Ready to process</span>
+                  </div>
+                  <span class="step-status-tag">Ready to process</span>
+                </div>
+              </div>
+
+              <!-- Agent Middle Grid: Info Card + Animated Earth Orbit Visualizer -->
+              <div class="agent-middle-grid">
+                <div class="agent-info-card">
+                  <div class="agent-info-item">
+                    <span class="agent-info-label">Detected Task</span>
+                    <span class="agent-info-value" id="detectedTaskVal">Single-image Understanding</span>
+                  </div>
+                  <div class="agent-info-item">
+                    <span class="agent-info-label">Selected Model</span>
+                    <span class="agent-info-value">
+                      <span id="selectedModelVal">GeoChat</span>
+                      <span class="specialist-badge blue" id="selectedModelBadge">Single Image</span>
+                    </span>
+                  </div>
+                  <div class="agent-info-item">
+                    <span class="agent-info-label">Input Type</span>
+                    <span class="agent-info-value" id="inputTypeVal">1 image (optical)</span>
+                  </div>
+                  <div class="agent-info-item">
+                    <span class="agent-info-label">Status</span>
+                    <span class="agent-info-value" id="agentStatusVal">
+                      <span style="color:var(--green-success)">●</span> Analysis Ready
+                    </span>
+                  </div>
+                </div>
+
+                <!-- 3D-like Holographic Earth and Orbit Canvas -->
+                <div class="agent-visual-box">
+                  <canvas id="agentOrbitCanvas" class="agent-visual-canvas"></canvas>
+                  <div class="agent-visual-text">
+                    <div class="agent-visual-title">SatQuery Agent</div>
+                    <div class="agent-visual-sub">The right model. For the right question. Automatically.</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Specialist Models Grid -->
+              <div class="specialists-container">
+                <div class="specialists-title">Specialist Models</div>
+                <div class="specialists-grid">
+                  <!-- GeoChat -->
+                  <div class="specialist-card geochat selected" id="specCard-geochat">
+                    <div class="specialist-card-top">
+                      <div class="spec-icon-badge blue">
+                        <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                      </div>
+                      <span class="spec-arrow">↗</span>
+                    </div>
+                    <div class="spec-name">GeoChat</div>
+                    <span class="specialist-badge blue spec-tag">Single Image</span>
+                    <ul class="spec-features-list">
+                      <li>VQA</li>
+                      <li>Captioning</li>
+                      <li>Grounding</li>
+                    </ul>
+                  </div>
+
+                  <!-- ChangeStar -->
+                  <div class="specialist-card changestar" id="specCard-changestar">
+                    <div class="specialist-card-top">
+                      <div class="spec-icon-badge orange">
+                        <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                        </svg>
+                      </div>
+                      <span class="spec-arrow">↗</span>
+                    </div>
+                    <div class="spec-name">ChangeStar</div>
+                    <span class="specialist-badge orange spec-tag">Bi-temporal</span>
+                    <ul class="spec-features-list">
+                      <li>Change Detection</li>
+                      <li>Change Understanding</li>
+                    </ul>
+                  </div>
+
+                  <!-- CROMA -->
+                  <div class="specialist-card croma" id="specCard-croma">
+                    <div class="specialist-card-top">
+                      <div class="spec-icon-badge purple">
+                        <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                          <polyline points="2 17 12 22 22 17"></polyline>
+                          <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                      </div>
+                      <span class="spec-arrow">↗</span>
+                    </div>
+                    <div class="spec-name">CROMA</div>
+                    <span class="specialist-badge purple spec-tag">Cross-modal</span>
+                    <ul class="spec-features-list">
+                      <li>Optical + SAR</li>
+                      <li>Joint Representation</li>
+                      <li>Multi-sensor Analysis</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: ANALYSIS RESULTS -->
+          <div class="workspace-col">
+            <div class="panel-card" style="flex:1;">
+              <div class="card-header-block">
+                <div class="card-header-icon">
+                  <svg style="width:18px;height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+                <div class="card-title-group">
+                  <h2>Analysis Results</h2>
+                  <p>Your query has been processed successfully</p>
+                </div>
+              </div>
+
+              <!-- Prominent Answer Card -->
+              <div class="answer-card">
+                <div class="answer-header">
+                  <div class="answer-badge-icon">A</div>
+                  <span class="answer-header-text">Answer</span>
+                </div>
+                <div class="answer-text" id="answerText">
+                  The image shows a mix of agricultural fields, a river, and urban built-up areas. The dominant land cover is vegetation with clear signs of human settlement near the riverbanks.
+                </div>
+              </div>
+
+              <!-- Visual Evidence Section with Legend and Interactive Thumbnails -->
+              <div class="evidence-card">
+                <div class="evidence-header">
+                  <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg>
+                  <span>Visual Evidence</span>
+                </div>
+
+                <div class="evidence-main-stage">
+                  <div class="evidence-main-img-wrap">
+                    <img id="evidenceMainImg" src="/data/samples/single_image/image.png" alt="Evidence Layer">
+                    <span class="evidence-overlay-tag" id="evidenceOverlayTag">Input Image</span>
+                  </div>
+
+                  <div class="legend-box">
+                    <div class="legend-title">Detected Land Cover</div>
+                    <div id="detectedLandCoverList">
+                      <!-- Populated dynamically -->
+                    </div>
+                  </div>
+                </div>
+
+                <div class="evidence-thumbnails-row" id="evidenceThumbnailsRow">
+                  <!-- Evidence layer thumbnails populated dynamically -->
+                </div>
+              </div>
+
+              <!-- Confidence Progress Ring Card -->
+              <div class="confidence-card">
+                <div class="confidence-left">
+                  <div class="confidence-circle-wrap">
+                    <svg width="44" height="44" viewBox="0 0 44 44">
+                      <circle class="confidence-circle-bg" cx="22" cy="22" r="18"/>
+                      <circle class="confidence-circle-bar" id="confidenceCircleBar" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="9.0"/>
+                    </svg>
+                    <span class="confidence-value-text" id="confidenceValueText">92%</span>
+                  </div>
+                  <div class="confidence-details">
+                    <span class="confidence-label">Confidence</span>
+                    <span class="confidence-status-badge" id="confidenceLevelText">High Confidence</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Observable Execution Trace (Compact) -->
+              <div class="trace-card">
+                <div class="trace-card-header">
+                  <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                  </svg>
+                  <span>Execution Trace</span>
+                </div>
+                <div class="trace-list" id="executionTraceList">
+                  <!-- Trace items populated dynamically -->
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ============================================
+           VIEW 2: SATELLITE ANALYSIS GALLERY
+           ============================================ -->
+      <section class="page-view" id="view-gallery">
+        <div class="gallery-page-container">
+          <div class="page-banner">
+            <h1>SATELLITE ANALYSIS GALLERY</h1>
+            <p>Explore predefined Earth-observation examples.</p>
+          </div>
+
+          <div class="gallery-cards-grid">
+            <!-- CARD 1: BI-TEMPORAL CHANGE ANALYSIS -->
+            <div class="gallery-card">
+              <div>
+                <span class="gallery-card-badge orange">ChangeStar</span>
+                <h3 class="gallery-card-title">BI-TEMPORAL CHANGE ANALYSIS</h3>
+                <div class="gallery-visual-strip">
+                  <div class="gallery-thumb-item">
+                    <img src="/data/samples/bi_temporal/before.png" alt="2024 Baseline">
+                    <span class="gallery-thumb-label">2024 Baseline</span>
+                  </div>
+                  <div class="gallery-thumb-item">
+                    <img src="/data/samples/bi_temporal/after.png" alt="2026 Epoch">
+                    <span class="gallery-thumb-label">2026 Epoch</span>
+                  </div>
+                  <div class="gallery-thumb-item">
+                    <img src="/data/samples/bi_temporal/change_map.png" alt="Delta Map">
+                    <span class="gallery-thumb-label">Change Map</span>
+                  </div>
+                </div>
+                <div class="gallery-query-quote">
+                  “What changed between these two dates?”
+                </div>
+              </div>
+              <button type="button" class="gallery-action-btn" onclick="analyzeSampleFromGallery('bi_temporal')">
+                <span>✦</span>
+                <span>ANALYZE SAMPLE</span>
+              </button>
+            </div>
+
+            <!-- CARD 2: OPTICAL + SAR CROSS-MODAL ANALYSIS -->
+            <div class="gallery-card">
+              <div>
+                <span class="gallery-card-badge purple">CROMA</span>
+                <h3 class="gallery-card-title">OPTICAL + SAR CROSS-MODAL ANALYSIS</h3>
+                <div class="gallery-visual-strip">
+                  <div class="gallery-thumb-item">
+                    <img src="/data/samples/optical_sar/optical.png" alt="Optical S2">
+                    <span class="gallery-thumb-label">Optical S2</span>
+                  </div>
+                  <div class="gallery-thumb-item">
+                    <img src="/data/samples/optical_sar/sar.png" alt="SAR S1">
+                    <span class="gallery-thumb-label">SAR S1</span>
+                  </div>
+                  <div class="gallery-thumb-item">
+                    <img src="/data/samples/optical_sar/joint_analysis.png" alt="Joint Fusion">
+                    <span class="gallery-thumb-label">Joint Fusion</span>
+                  </div>
+                </div>
+                <div class="gallery-query-quote">
+                  “Use both images to identify built-up and water-covered regions.”
+                </div>
+              </div>
+              <button type="button" class="gallery-action-btn" onclick="analyzeSampleFromGallery('optical_sar')">
+                <span>✦</span>
+                <span>ANALYZE SAMPLE</span>
+              </button>
+            </div>
+
+            <!-- CARD 3: SINGLE-IMAGE UNDERSTANDING -->
+            <div class="gallery-card">
+              <div>
+                <span class="gallery-card-badge blue">GeoChat</span>
+                <h3 class="gallery-card-title">SINGLE-IMAGE UNDERSTANDING</h3>
+                <div class="gallery-visual-strip gallery-visual-single">
+                  <div class="gallery-thumb-item" style="height:120px;">
+                    <img src="/data/samples/single_image/image.png" alt="Optical Multispectral Scene">
+                    <span class="gallery-thumb-label">Sentinel Optical Scene (RGB + NIR)</span>
+                  </div>
+                </div>
+                <div class="gallery-query-quote">
+                  “Describe the land cover and major objects visible in this image.”
+                </div>
+              </div>
+              <button type="button" class="gallery-action-btn" onclick="analyzeSampleFromGallery('single_image')">
+                <span>✦</span>
+                <span>ANALYZE SAMPLE</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================
+           VIEW 3: DEDICATED RESULTS PAGE
+           ============================================ -->
+      <section class="page-view" id="view-results">
+        <div class="results-page-container">
+          <div class="results-top-banner">
+            <div class="results-query-display">
+              <span class="results-query-label">Active Satellite Query</span>
+              <span class="results-query-val" id="dedResultsQuery">"Describe the land cover and major objects visible in this image"</span>
+            </div>
+            <div class="results-meta-pill">
+              <span class="specialist-badge blue" id="dedResultsModel">GeoChat</span>
+              <span class="specialist-badge orange" id="dedResultsTask">Single-image Understanding</span>
+              <span class="specialist-badge purple" id="dedResultsConf">92% (High Confidence)</span>
+            </div>
+          </div>
+
+          <div class="results-detail-grid">
+            <div class="panel-card">
+              <h3 style="font-size:1rem;color:#ffffff;margin-bottom:12px;">High-Resolution Evidence Inspection</h3>
+              <div style="width:100%;height:320px;border-radius:var(--radius-md);overflow:hidden;background:#030712;border:1px solid rgba(56,189,248,0.3);">
+                <img id="dedResultsMainImg" src="/data/samples/single_image/image.png" style="width:100%;height:100%;object-fit:cover;" alt="High-Res Result Evidence">
+              </div>
+            </div>
+
+            <div class="panel-card" style="display:flex;flex-direction:column;gap:16px;">
+              <div class="answer-card" style="margin-bottom:0;">
+                <div class="answer-header">
+                  <div class="answer-badge-icon">A</div>
+                  <span class="answer-header-text">Synthesized Geospatial Response</span>
+                </div>
+                <div class="answer-text" id="dedResultsAnswer">
+                  The image shows a mix of agricultural fields, a river, and urban built-up areas. The dominant land cover is vegetation with clear signs of human settlement near the riverbanks.
+                </div>
+              </div>
+
+              <div>
+                <h4 style="font-size:0.85rem;color:#ffffff;margin-bottom:10px;">Land Cover Area Breakdown</h4>
+                <div id="dedResultsLandCoverBars"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================
+           VIEW 4: OBSERVABLE EXECUTION TRACE PAGE
+           ============================================ -->
+      <section class="page-view" id="view-trace">
+        <div class="trace-page-container">
+          <div class="page-banner">
+            <h1>OBSERVABLE EXECUTION TIMELINE</h1>
+            <p>End-to-end transparent execution pipeline from query formulation to geospatial synthesis.</p>
+          </div>
+
+          <div class="timeline-flow" id="dedTraceTimelineList">
+            <!-- Timeline stage cards populated dynamically -->
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script src="/static/js/orbit.js"></script>
+<script src="/static/js/app.js"></script>
+
+</body>
+</html>

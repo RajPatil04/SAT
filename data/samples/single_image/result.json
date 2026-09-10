@@ -1,0 +1,106 @@
+{
+  "task": "Single-image Understanding",
+  "model": "GeoChat",
+  "input_type": "1 image (optical)",
+  "modality": "Optical",
+  "acquisition_date": "2024-05-15",
+  "filename": "test_image.tif",
+  "format": "GeoTIFF",
+  "dimensions": "1024 \u00d7 1024",
+  "bands": "4 (RGB + NIR)",
+  "status": "Analysis Ready",
+  "answer": "The image shows a mix of agricultural fields, a river, and urban built-up areas. The dominant land cover is vegetation with clear signs of human settlement near the riverbanks.",
+  "confidence": 0.92,
+  "confidence_level": "High Confidence",
+  "detected_land_cover": [
+    {
+      "label": "Vegetation",
+      "color": "#22c55e",
+      "percentage": 52
+    },
+    {
+      "label": "Water Body",
+      "color": "#3b82f6",
+      "percentage": 14
+    },
+    {
+      "label": "Built-up Area",
+      "color": "#ef4444",
+      "percentage": 18
+    },
+    {
+      "label": "Agriculture",
+      "color": "#eab308",
+      "percentage": 12
+    },
+    {
+      "label": "Roads",
+      "color": "#cbd5e1",
+      "percentage": 4
+    }
+  ],
+  "evidence": [
+    {
+      "id": "main",
+      "label": "Input Image",
+      "file": "image.png",
+      "type": "RGB Optical"
+    },
+    {
+      "id": "seg",
+      "label": "Land Cover Segmentation",
+      "file": "segmentation.png",
+      "type": "Multi-class Mask"
+    },
+    {
+      "id": "sar",
+      "label": "SAR Backscatter",
+      "file": "sar_feature.png",
+      "type": "Radar Feature"
+    },
+    {
+      "id": "ndvi",
+      "label": "NIR False Color",
+      "file": "ndvi.png",
+      "type": "Multispectral Index"
+    }
+  ],
+  "execution_trace": [
+    {
+      "step": "01",
+      "name": "Input Validation",
+      "desc": "Checked format, metadata, compatibility",
+      "status": "Completed"
+    },
+    {
+      "step": "02",
+      "name": "Query Understanding",
+      "desc": "Identified as single-image analysis",
+      "status": "Completed"
+    },
+    {
+      "step": "03",
+      "name": "Agent Routing",
+      "desc": "Selected GeoChat model",
+      "status": "Completed"
+    },
+    {
+      "step": "04",
+      "name": "Model Execution",
+      "desc": "VQA + Captioning",
+      "status": "Completed"
+    },
+    {
+      "step": "05",
+      "name": "Result Integration",
+      "desc": "Combined output with spatial evidence",
+      "status": "Completed"
+    },
+    {
+      "step": "06",
+      "name": "Final Output",
+      "desc": "Answer + Visual evidence + Confidence",
+      "status": "Completed"
+    }
+  ]
+}

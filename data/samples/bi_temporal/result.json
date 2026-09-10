@@ -1,0 +1,100 @@
+{
+  "task": "Bi-temporal Change Analysis",
+  "model": "ChangeStar",
+  "input_type": "2 images (optical pair: 2024 vs 2026)",
+  "modality": "Bi-temporal Optical",
+  "acquisition_date": "2024-04-12 / 2026-03-08",
+  "filename": "pair_2024_2026.tif",
+  "format": "GeoTIFF Pair",
+  "dimensions": "1024 \u00d7 1024",
+  "bands": "4 Bands per epoch",
+  "status": "Analysis Ready",
+  "answer": "Significant urban expansion and new infrastructure development detected. Built-up area increased by approximately +38.4 hectares between 2024 and 2026, primarily replacing former pasture and forest land with a new transportation corridor.",
+  "confidence": 0.89,
+  "confidence_level": "High Confidence",
+  "detected_land_cover": [
+    {
+      "label": "New Built-up Area",
+      "color": "#f97316",
+      "percentage": 24
+    },
+    {
+      "label": "Intact Vegetation",
+      "color": "#22c55e",
+      "percentage": 48
+    },
+    {
+      "label": "Water Body (Unchanged)",
+      "color": "#3b82f6",
+      "percentage": 14
+    },
+    {
+      "label": "Cleared Land",
+      "color": "#eab308",
+      "percentage": 9
+    },
+    {
+      "label": "New Highway Corridor",
+      "color": "#cbd5e1",
+      "percentage": 5
+    }
+  ],
+  "evidence": [
+    {
+      "id": "before",
+      "label": "2024 Before Image",
+      "file": "before.png",
+      "type": "Historical Baseline"
+    },
+    {
+      "id": "after",
+      "label": "2026 After Image",
+      "file": "after.png",
+      "type": "Current Observation"
+    },
+    {
+      "id": "change",
+      "label": "Change Detection Map",
+      "file": "change_map.png",
+      "type": "ChangeStar Delta Map"
+    }
+  ],
+  "execution_trace": [
+    {
+      "step": "01",
+      "name": "Input Validation",
+      "desc": "Validated dual epoch GeoTIFFs & spatial co-registration",
+      "status": "Completed"
+    },
+    {
+      "step": "02",
+      "name": "Query Understanding",
+      "desc": "Identified task as bi-temporal delta detection",
+      "status": "Completed"
+    },
+    {
+      "step": "03",
+      "name": "Agent Routing",
+      "desc": "Routed to ChangeStar specialist",
+      "status": "Completed"
+    },
+    {
+      "step": "04",
+      "name": "Model Execution",
+      "desc": "Dense temporal cross-attention & segmentation",
+      "status": "Completed"
+    },
+    {
+      "step": "05",
+      "name": "Result Integration",
+      "desc": "Computed change polygon statistics & delta mask",
+      "status": "Completed"
+    },
+    {
+      "step": "06",
+      "name": "Final Output",
+      "desc": "Delivered change map and quantitative impact report",
+      "status": "Completed"
+    }
+  ]
+}

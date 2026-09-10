@@ -1,0 +1,100 @@
+{
+  "task": "Cross-modal Analysis",
+  "model": "CROMA",
+  "input_type": "2 images (Optical + SAR Sentinel Pair)",
+  "modality": "Optical + SAR Cross-Modal",
+  "acquisition_date": "2025-11-20",
+  "filename": "s2_s1_colocated.tif",
+  "format": "Multispectral + C-Band SAR",
+  "dimensions": "1024 \u00d7 1024",
+  "bands": "Optical (B2,B3,B4,B8) + SAR (VV, VH)",
+  "status": "Analysis Ready",
+  "answer": "Cross-modal fusion successfully disambiguated cloud-obscured surface features in the north-west sector. SAR backscatter identified hidden industrial structures beneath cloud cover while optical spectral bands accurately delineated agricultural plots and river boundary geometry.",
+  "confidence": 0.94,
+  "confidence_level": "High Confidence",
+  "detected_land_cover": [
+    {
+      "label": "Cloud-Penetrated Structures",
+      "color": "#a855f7",
+      "percentage": 16
+    },
+    {
+      "label": "Vegetation / Agriculture",
+      "color": "#22c55e",
+      "percentage": 50
+    },
+    {
+      "label": "Water Body (Specular)",
+      "color": "#3b82f6",
+      "percentage": 14
+    },
+    {
+      "label": "Urban Settlement",
+      "color": "#ef4444",
+      "percentage": 15
+    },
+    {
+      "label": "Transport Arteries",
+      "color": "#cbd5e1",
+      "percentage": 5
+    }
+  ],
+  "evidence": [
+    {
+      "id": "optical",
+      "label": "Optical S2 Imagery",
+      "file": "optical.png",
+      "type": "Multispectral Optical"
+    },
+    {
+      "id": "sar",
+      "label": "SAR S1 Radar Backscatter",
+      "file": "sar.png",
+      "type": "C-band Co-pol Radar"
+    },
+    {
+      "id": "joint",
+      "label": "CROMA Joint Analysis",
+      "file": "joint_analysis.png",
+      "type": "Cross-Modal Representation"
+    }
+  ],
+  "execution_trace": [
+    {
+      "step": "01",
+      "name": "Input Validation",
+      "desc": "Validated Optical (S2) and SAR (S1) spatial alignment",
+      "status": "Completed"
+    },
+    {
+      "step": "02",
+      "name": "Query Understanding",
+      "desc": "Identified cross-modal fusion & feature disambiguation",
+      "status": "Completed"
+    },
+    {
+      "step": "03",
+      "name": "Agent Routing",
+      "desc": "Selected CROMA multimodal specialist",
+      "status": "Completed"
+    },
+    {
+      "step": "04",
+      "name": "Model Execution",
+      "desc": "Cross-attention optical-radar encoder fusion",
+      "status": "Completed"
+    },
+    {
+      "step": "05",
+      "name": "Result Integration",
+      "desc": "Merged cloud-penetrated structures with optical mask",
+      "status": "Completed"
+    },
+    {
+      "step": "06",
+      "name": "Final Output",
+      "desc": "Delivered joint cross-modal synthesis & classification",
+      "status": "Completed"
+    }
+  ]
+}
