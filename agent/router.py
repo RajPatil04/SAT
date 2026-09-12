@@ -19,15 +19,24 @@ class SatQueryAgentRouter:
         Determines the appropriate specialist model based on input mode and query keywords.
         Returns (detected_task, selected_model_name, model_instance)
         """
-        mode_clean = (mode or "").lower()
-        q_clean = (query or "").lower()
+        mode_clean = (mode or "").lower().strip()
+        q_clean = (query or "").lower().strip()
 
-        # Bi-temporal change detection
-        if "bi_temporal" in mode_clean or "pair" in mode_clean or "change" in q_clean or "temporal" in q_clean or "between" in q_clean:
+        # 1. Strict mode enforcement (when mode is explicitly provided by UI/client)
+        if mode_clean in ["single_image", "single"]:
+            return "Single-image Understanding", "GeoChat", self.geochat
+
+        if mode_clean in ["bi_temporal", "temporal", "bitemporal", "pair"]:
             return "Bi-temporal Change Analysis", "ChangeStar", self.changestar
 
-        # Optical + SAR cross-modal
-        if "optical_sar" in mode_clean or "sar" in mode_clean or "radar" in q_clean or "cross" in q_clean or "croma" in q_clean:
+        if mode_clean in ["optical_sar", "sar", "cross_modal", "croma"]:
+            return "Cross-modal Analysis", "CROMA", self.croma
+
+        # 2. Heuristic fallback when mode is generic or auto
+        if any(w in q_clean for w in ["change", "temporal", "between", "delta", "before", "after", "expansion"]):
+            return "Bi-temporal Change Analysis", "ChangeStar", self.changestar
+
+        if any(w in q_clean for w in ["sar", "radar", "cross", "croma", "cloud", "microwave"]):
             return "Cross-modal Analysis", "CROMA", self.croma
 
         # Default: Single Image VQA / Grounding / Captioning

@@ -303,18 +303,17 @@ body {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #38bdf8, #1e3a8a 60%, #030712 100%);
+  background: transparent;
   position: relative;
-  box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
-  border: 1px solid rgba(56, 189, 248, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.sidebar-satellite-orbit {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  width: 16px;
-  height: 16px;
+.sidebar-earth-canvas {
+  width: 48px;
+  height: 48px;
+  display: block;
 }
 
 .sidebar-tagline {
@@ -1178,7 +1177,7 @@ body {
 }
 
 .evidence-thumb-btn {
-  height: 52px;
+  height: 58px;
   border-radius: var(--radius-sm);
   overflow: hidden;
   border: 1.5px solid rgba(255, 255, 255, 0.12);
@@ -1961,15 +1960,15 @@ body {
 /* MAIN EVIDENCE STAGE */
 .evidence-main-stage {
   display: grid;
-  grid-template-columns: 1fr 150px;
-  gap: 12px;
+  grid-template-columns: 1fr 165px;
+  gap: 14px;
   align-items: stretch;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .evidence-main-img-wrap {
   width: 100%;
-  height: 200px;
+  height: 235px;
   border-radius: var(--radius-sm);
   overflow: hidden;
   background: #030712;
@@ -2068,7 +2067,7 @@ body {
 
 .comparison-slider-stage {
   width: 100%;
-  height: 200px;
+  height: 235px;
   border-radius: var(--radius-sm);
   overflow: hidden;
   position: relative;
@@ -2215,8 +2214,8 @@ body {
 }
 
 .donut-chart-container {
-  width: 90px;
-  height: 90px;
+  width: 96px;
+  height: 96px;
   margin: 0 auto;
   position: relative;
 }
@@ -2271,7 +2270,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  max-height: 96px;
+  max-height: 125px;
   overflow-y: auto;
 }
 
@@ -2289,23 +2288,24 @@ body {
 /* Confidence & Telemetry Row */
 .confidence-telemetry-row {
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 8px;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 12px;
+  margin-top: 4px;
 }
 
 .confidence-telemetry-row .confidence-card {
   margin-bottom: 0;
-  padding: 8px 12px;
+  padding: 10px 14px;
 }
 
 .sensor-telemetry-box {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
+  gap: 8px;
   background: rgba(6, 14, 28, 0.8);
   border: 1px solid rgba(45, 75, 115, 0.45);
   border-radius: var(--radius-md);
-  padding: 8px 10px;
+  padding: 10px 12px;
   align-items: center;
 }
 
