@@ -1,0 +1,18 @@
+# Bytecode and runtime caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE configurations
+.vscode/
+.idea/
+
+# User uploaded files
+data/uploads/*
+!data/uploads/.gitkeep

@@ -108,13 +108,7 @@
 
       <div class="sidebar-bottom">
         <div class="sidebar-bottom-earth">
-          <div class="sidebar-satellite-orbit">
-            <svg viewBox="0 0 16 16" fill="#38bdf8">
-              <rect x="5" y="5" width="6" height="6" rx="1"/>
-              <line x1="1" y1="8" x2="5" y2="8" stroke="#ffffff" stroke-width="1.5"/>
-              <line x1="11" y1="8" x2="15" y2="8" stroke="#ffffff" stroke-width="1.5"/>
-            </svg>
-          </div>
+          <canvas id="sidebarEarthCanvas" width="48" height="48" class="sidebar-earth-canvas"></canvas>
         </div>
         <div class="sidebar-tagline">
           From Satellite Data<br>to Actionable Insights
@@ -133,7 +127,7 @@
           
           <!-- LEFT COLUMN: SATELLITE INPUT -->
           <div class="workspace-col">
-            <div class="panel-card">
+            <div class="panel-card compact-input-card">
               <div class="card-header-block">
                 <div class="card-header-icon">
                   <svg style="width:18px;height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -145,89 +139,69 @@
                 </div>
                 <div class="card-title-group">
                   <h2>Satellite Input</h2>
-                  <p>Upload your satellite data or choose from gallery</p>
+                  <p>Sensor telemetry & observation mode</p>
+                </div>
+                <div class="sensor-badge-pill" id="activeSensorPill" title="Active Sensor Platform">
+                  <span class="sensor-dot"></span>
+                  <span id="sensorNameText">Sentinel-2A</span>
                 </div>
               </div>
 
               <!-- Input Mode Selector -->
-              <div class="input-mode-label">Input Mode</div>
               <div class="input-mode-tabs">
-                <div class="mode-tab-btn active" data-mode="single_image" id="modeBtnSingle">
+                <button type="button" class="mode-tab-btn active" data-mode="single_image" id="modeBtnSingle">
                   <svg viewBox="0 0 24 24" fill="none">
                     <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor"/>
                     <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
                     <polyline points="21 15 16 10 5 21" stroke="currentColor"/>
                   </svg>
                   <span>Single Image</span>
-                </div>
-                <div class="mode-tab-btn" data-mode="bi_temporal" id="modeBtnBiTemporal">
+                </button>
+                <button type="button" class="mode-tab-btn" data-mode="bi_temporal" id="modeBtnBiTemporal">
                   <svg viewBox="0 0 24 24" fill="none">
                     <circle cx="12" cy="12" r="9" stroke="currentColor"/>
                     <polyline points="12 6 12 12 16 14" stroke="currentColor"/>
                   </svg>
-                  <span>Bi-temporal Pair</span>
-                </div>
-                <div class="mode-tab-btn" data-mode="optical_sar" id="modeBtnOpticalSar">
+                  <span>Bi-temporal</span>
+                </button>
+                <button type="button" class="mode-tab-btn" data-mode="optical_sar" id="modeBtnOpticalSar">
                   <svg viewBox="0 0 24 24" fill="none">
                     <path d="M2 12h20M12 2v20" stroke="currentColor"/>
                     <circle cx="12" cy="12" r="6" stroke="currentColor"/>
                   </svg>
-                  <span>Optical + SAR Pair</span>
-                </div>
+                  <span>Optical + SAR</span>
+                </button>
               </div>
 
-              <!-- Upload Drag & Drop Box -->
-              <div class="upload-dropzone" id="fileDropzone">
-                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="17 8 12 3 7 8"></polyline>
-                  <line x1="12" y1="3" x2="12" y2="15"></line>
-                </svg>
-                <div class="upload-prompt">Drag & drop image here</div>
-                <div class="upload-or">or</div>
-                <button type="button" class="choose-file-btn">Choose File</button>
-                <input type="file" id="filePickerInput" style="display:none;" accept=".tif,.tiff,.png,.jpg,.jpeg">
-                <div class="supported-formats-text">Accepted formats: GeoTIFF, TIFF, PNG, JPEG</div>
-              </div>
-
-              <!-- Image Preview Block (Single Image) -->
+              <!-- Image Preview & Telemetry Strip (Single Image) -->
               <div class="preview-card-inner" id="singlePreviewBlock">
-                <div class="preview-header-bar">
-                  <div class="preview-header-title">
-                    <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-                      <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                    </svg>
-                    <span>Image Preview</span>
-                  </div>
-                </div>
                 <div class="preview-body-grid">
-                  <div class="preview-thumbnail-wrap">
+                  <div class="preview-thumbnail-wrap" id="previewThumbWrap" title="Click to replace image">
                     <img id="previewImgThumb" src="/data/samples/single_image/image.png" alt="Satellite Preview">
+                    <div class="thumb-hover-overlay">
+                      <svg style="width:18px;height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                      </svg>
+                      <span>Change File</span>
+                    </div>
                   </div>
-                  <div class="metadata-table">
+                  <div class="metadata-table compact">
                     <div class="meta-row">
                       <span class="meta-label">File:</span>
                       <span class="meta-value accent" id="metaFileName">test_image.tif</span>
                     </div>
                     <div class="meta-row">
-                      <span class="meta-label">Format:</span>
-                      <span class="meta-value" id="metaFormat">GeoTIFF</span>
-                    </div>
-                    <div class="meta-row">
-                      <span class="meta-label">Dimensions:</span>
-                      <span class="meta-value" id="metaDimensions">1024 × 1024</span>
+                      <span class="meta-label">Resolution:</span>
+                      <span class="meta-value" id="metaDimensions">1024 × 1024 (10m)</span>
                     </div>
                     <div class="meta-row">
                       <span class="meta-label">Bands:</span>
                       <span class="meta-value" id="metaBands">4 (RGB + NIR)</span>
                     </div>
                     <div class="meta-row">
-                      <span class="meta-label">Modality:</span>
-                      <span class="meta-value" id="metaModality">Optical</span>
-                    </div>
-                    <div class="meta-row">
-                      <span class="meta-label">Acquisition Date:</span>
+                      <span class="meta-label">Acquisition:</span>
                       <span class="meta-value" id="metaDate">2024-05-15</span>
                     </div>
                   </div>
@@ -235,7 +209,7 @@
               </div>
 
               <!-- Dual Preview Block (Bi-temporal / Optical+SAR) -->
-              <div class="dual-preview-grid" id="dualPreviewBlock" style="display:none;">
+              <div class="dual-preview-grid compact" id="dualPreviewBlock" style="display:none;">
                 <div class="dual-preview-box">
                   <div class="dual-preview-label" id="dualLabel1">BEFORE (2024)</div>
                   <img id="dualImg1" src="/data/samples/bi_temporal/before.png" alt="Before Observation">
@@ -245,38 +219,53 @@
                   <img id="dualImg2" src="/data/samples/bi_temporal/after.png" alt="After Observation">
                 </div>
               </div>
+
+              <!-- Compact Upload Bar -->
+              <div class="upload-compact-bar" id="fileDropzone">
+                <div class="upload-bar-left">
+                  <svg class="upload-icon-mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                  <span class="upload-prompt-text">Drop image or <strong class="accent-text">browse</strong></span>
+                </div>
+                <button type="button" class="choose-file-btn mini">Upload</button>
+                <input type="file" id="filePickerInput" style="display:none;" accept=".tif,.tiff,.png,.jpg,.jpeg">
+              </div>
             </div>
 
             <!-- Natural Language Query Box: Ask SatQuery AI -->
-            <div class="panel-card">
+            <div class="panel-card query-card">
               <div class="card-header-block">
-                <div class="card-header-icon">
+                <div class="card-header-icon pulse-glow">
                   <svg style="width:18px;height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                   </svg>
                 </div>
                 <div class="card-title-group">
                   <h2>Ask SatQuery AI</h2>
-                  <p>Enter your question about the satellite image</p>
+                  <p>Natural language satellite query</p>
                 </div>
               </div>
 
               <div class="query-box-container">
                 <div class="query-textarea-wrap">
-                  <textarea class="query-textarea" id="satQueryInput" placeholder="e.g. What land cover is visible in this image?">Describe the land cover and major objects visible in this image</textarea>
+                  <textarea class="query-textarea" id="satQueryInput" rows="3" placeholder="e.g. What land cover is visible in this image?">Describe the land cover and major objects visible in this image</textarea>
                   <span class="char-counter" id="queryCharCount">63/500</span>
                 </div>
 
                 <div class="example-queries-section">
-                  <div class="example-chips-label">Example Queries:</div>
+                  <div class="example-chips-label">Preset Queries:</div>
                   <div class="example-chips-wrap" id="exampleChipsContainer">
                     <!-- Dynamically populated per mode -->
                   </div>
                 </div>
 
                 <button type="button" class="analyze-action-btn" id="analyzeSubmitBtn">
-                  <span>✦</span>
-                  <span>Analyze</span>
+                  <span class="btn-sparkle">✦</span>
+                  <span class="btn-text">Analyze Scene</span>
+                  <span class="btn-shortcut">Ctrl+Enter</span>
                 </button>
               </div>
             </div>
@@ -442,16 +431,40 @@
 
           <!-- RIGHT COLUMN: ANALYSIS RESULTS -->
           <div class="workspace-col">
-            <div class="panel-card" style="flex:1;">
-              <div class="card-header-block">
-                <div class="card-header-icon">
-                  <svg style="width:18px;height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
+            <div class="panel-card results-main-card" style="flex:1;">
+              <div class="card-header-block results-header-flex">
+                <div class="results-header-left">
+                  <div class="card-header-icon">
+                    <svg style="width:18px;height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </div>
+                  <div class="card-title-group">
+                    <h2>Analysis Results</h2>
+                    <p>Geospatial synthesis & visual proof</p>
+                  </div>
                 </div>
-                <div class="card-title-group">
-                  <h2>Analysis Results</h2>
-                  <p>Your query has been processed successfully</p>
+
+                <!-- Export & Action Toolbar -->
+                <div class="results-actions-bar">
+                  <button type="button" class="export-btn" id="exportImgBtn" title="Download High-Res Annotated Image">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="7 10 12 15 17 10"></polyline>
+                      <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <span>Save Image</span>
+                  </button>
+                  <button type="button" class="export-btn primary" id="exportReportBtn" title="Export Intelligence Summary Report">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                      <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    <span>Report</span>
+                  </button>
                 </div>
               </div>
 
@@ -459,68 +472,147 @@
               <div class="answer-card">
                 <div class="answer-header">
                   <div class="answer-badge-icon">A</div>
-                  <span class="answer-header-text">Answer</span>
+                  <span class="answer-header-text">Geospatial Synthesis</span>
+                  <div class="telemetry-pill-mini" id="inferenceLatencyPill">
+                    <span>⚡</span>
+                    <span id="latencyValueText">108 ms</span>
+                  </div>
                 </div>
                 <div class="answer-text" id="answerText">
                   The image shows a mix of agricultural fields, a river, and urban built-up areas. The dominant land cover is vegetation with clear signs of human settlement near the riverbanks.
                 </div>
               </div>
 
-              <!-- Visual Evidence Section with Legend and Interactive Thumbnails -->
+              <!-- Visual Evidence Section with Comparison Slider & Layer Blend -->
               <div class="evidence-card">
-                <div class="evidence-header">
-                  <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                  </svg>
-                  <span>Visual Evidence</span>
+                <div class="evidence-header-bar">
+                  <div class="evidence-header-left">
+                    <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span>Visual Evidence Stage</span>
+                  </div>
+                  <!-- Mode specific viewer controls -->
+                  <div class="evidence-viewer-tools">
+                    <span class="evidence-mode-badge" id="evidenceViewModeBadge">Standard View</span>
+                  </div>
                 </div>
 
-                <div class="evidence-main-stage">
-                  <div class="evidence-main-img-wrap">
+                <!-- MAIN EVIDENCE STAGE (Contains Single View & Split Swipe Slider) -->
+                <div class="evidence-main-stage" id="evidenceMainStage">
+                  
+                  <!-- View A: Standard Single / Blended Layer Stage -->
+                  <div class="evidence-main-img-wrap" id="standardEvidenceView">
                     <img id="evidenceMainImg" src="/data/samples/single_image/image.png" alt="Evidence Layer">
+                    <!-- Layer Mask Blending Layer (for segmentation or NDVI overlay) -->
+                    <img id="evidenceOverlayImg" src="/data/samples/single_image/segmentation.png" alt="Mask Overlay" style="display:none; opacity:0.75;">
                     <span class="evidence-overlay-tag" id="evidenceOverlayTag">Input Image</span>
+                    
+                    <!-- Radar Scanline Sweep during Analysis -->
+                    <div class="radar-scanline" id="radarScanline"></div>
+
+                    <!-- Live Pixel Inspector HUD -->
+                    <div class="inspector-hud" id="inspectorHud">
+                      <span class="hud-coords" id="hudCoordsText">34.0522° N, 118.2437° W</span>
+                      <span class="hud-sep">•</span>
+                      <span class="hud-class" id="hudClassVal">Vegetation (NIR: 0.82)</span>
+                    </div>
                   </div>
 
-                  <div class="legend-box">
-                    <div class="legend-title">Detected Land Cover</div>
-                    <div id="detectedLandCoverList">
-                      <!-- Populated dynamically -->
+                  <!-- View B: Interactive Swipe Comparison Slider (for Bi-temporal & Optical+SAR) -->
+                  <div class="comparison-slider-stage" id="comparisonSliderStage" style="display:none;">
+                    <div class="comparison-img-box after-box">
+                      <img id="sliderAfterImg" src="/data/samples/bi_temporal/after.png" alt="After Image">
+                      <span class="slider-badge right" id="sliderAfterBadge">2026 Epoch</span>
+                    </div>
+                    <div class="comparison-img-box before-box" id="sliderBeforeBox">
+                      <img id="sliderBeforeImg" src="/data/samples/bi_temporal/before.png" alt="Before Image">
+                      <span class="slider-badge left" id="sliderBeforeBadge">2024 Baseline</span>
+                    </div>
+                    <div class="slider-divider-line" id="sliderDividerLine">
+                      <div class="slider-handle" id="sliderHandle" title="Drag to compare">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M8 5v14l-6-7 6-7zm8 0v14l6-7-6-7z"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <!-- Radar Scanline on slider -->
+                    <div class="radar-scanline" id="radarScanlineSlider"></div>
+                  </div>
+
+                  <!-- Land Cover Analytics Card (Donut Chart & Legend) -->
+                  <div class="land-cover-analytics-box">
+                    <div class="legend-title">Detected Land Cover Distribution</div>
+                    <div class="analytics-split">
+                      <div class="donut-chart-container" id="donutChartContainer">
+                        <!-- Interactive SVG Donut Chart rendered dynamically -->
+                        <svg id="landCoverDonutSvg" viewBox="0 0 100 100" class="donut-svg">
+                          <circle cx="50" cy="50" r="38" class="donut-bg-ring"/>
+                        </svg>
+                        <div class="donut-center-info">
+                          <span class="donut-center-val" id="donutCenterVal">100%</span>
+                          <span class="donut-center-lbl">Total Area</span>
+                        </div>
+                      </div>
+                      <div class="legend-list-wrap" id="detectedLandCoverList">
+                        <!-- Populated dynamically -->
+                      </div>
                     </div>
                   </div>
                 </div>
 
+                <!-- Layer Opacity Slider (visible when mask/segmentation active) -->
+                <div class="layer-opacity-toolbar" id="layerOpacityToolbar" style="display:none;">
+                  <div class="opacity-label-group">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <path d="M12 2a10 10 0 0 1 0 20z" fill="currentColor"></path>
+                    </svg>
+                    <span>Mask Blend Opacity:</span>
+                    <strong id="opacityValText">75%</strong>
+                  </div>
+                  <input type="range" class="opacity-range-slider" id="layerOpacitySlider" min="0" max="100" value="75">
+                </div>
+
+                <!-- Evidence Thumbnails Row -->
                 <div class="evidence-thumbnails-row" id="evidenceThumbnailsRow">
                   <!-- Evidence layer thumbnails populated dynamically -->
                 </div>
               </div>
 
-              <!-- Confidence Progress Ring Card -->
-              <div class="confidence-card">
-                <div class="confidence-left">
-                  <div class="confidence-circle-wrap">
-                    <svg width="44" height="44" viewBox="0 0 44 44">
-                      <circle class="confidence-circle-bg" cx="22" cy="22" r="18"/>
-                      <circle class="confidence-circle-bar" id="confidenceCircleBar" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="9.0"/>
-                    </svg>
-                    <span class="confidence-value-text" id="confidenceValueText">92%</span>
-                  </div>
-                  <div class="confidence-details">
-                    <span class="confidence-label">Confidence</span>
-                    <span class="confidence-status-badge" id="confidenceLevelText">High Confidence</span>
+              <!-- Confidence & Telemetry Row -->
+              <div class="confidence-telemetry-row">
+                <!-- Confidence Progress Ring Card -->
+                <div class="confidence-card">
+                  <div class="confidence-left">
+                    <div class="confidence-circle-wrap">
+                      <svg width="44" height="44" viewBox="0 0 44 44">
+                        <circle class="confidence-circle-bg" cx="22" cy="22" r="18"/>
+                        <circle class="confidence-circle-bar" id="confidenceCircleBar" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="9.0"/>
+                      </svg>
+                      <span class="confidence-value-text" id="confidenceValueText">92%</span>
+                    </div>
+                    <div class="confidence-details">
+                      <span class="confidence-label">Confidence</span>
+                      <span class="confidence-status-badge" id="confidenceLevelText">High Confidence</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <!-- Observable Execution Trace (Compact) -->
-              <div class="trace-card">
-                <div class="trace-card-header">
-                  <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                  </svg>
-                  <span>Execution Trace</span>
-                </div>
-                <div class="trace-list" id="executionTraceList">
-                  <!-- Trace items populated dynamically -->
+                <!-- Sensor Telemetry Strip -->
+                <div class="sensor-telemetry-box">
+                  <div class="telemetry-item">
+                    <span class="telem-label">GSD Res</span>
+                    <span class="telem-val" id="telemGsd">10m / px</span>
+                  </div>
+                  <div class="telemetry-item">
+                    <span class="telem-label">Cloud Cover</span>
+                    <span class="telem-val green" id="telemCloud">&lt; 2.1%</span>
+                  </div>
+                  <div class="telemetry-item">
+                    <span class="telem-label">Specialist</span>
+                    <span class="telem-val accent" id="telemModel">GeoChat</span>
+                  </div>
                 </div>
               </div>
 

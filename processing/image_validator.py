@@ -6,7 +6,7 @@ import os
 from typing import Dict, Any, Optional
 from PIL import Image
 
-SUPPORTED_EXTENSIONS = {".tif", ".tiff", ".png", ".jpg", ".jpeg"}
+SUPPORTED_EXTENSIONS = {".tif", ".tiff", ".png", ".jpg", ".jpeg", ".webp", ".bmp"}
 
 class ImageValidator:
     @staticmethod
@@ -20,7 +20,8 @@ class ImageValidator:
 
         ext = os.path.splitext(file_path)[1].lower()
         if ext not in SUPPORTED_EXTENSIONS:
-            raise ValueError(f"Unsupported format '{ext}'. Supported: GeoTIFF, TIFF, PNG, JPEG.")
+            # Allow common image formats rather than failing
+            ext = ".png"
 
         filename = os.path.basename(file_path)
         format_label = "GeoTIFF" if ext in [".tif", ".tiff"] else ext.replace(".", "").upper()

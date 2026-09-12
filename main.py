@@ -38,12 +38,15 @@ router = SatQueryAgentRouter()
 # Static directories
 STATIC_DIR = os.path.join(BASE_DIR, "ui", "static")
 DATA_SAMPLES_DIR = os.path.join(BASE_DIR, "data", "samples")
+DATA_UPLOADS_DIR = os.path.join(BASE_DIR, "data", "uploads")
 
 os.makedirs(STATIC_DIR, exist_ok=True)
 os.makedirs(DATA_SAMPLES_DIR, exist_ok=True)
+os.makedirs(DATA_UPLOADS_DIR, exist_ok=True)
 
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 app.mount("/data/samples", StaticFiles(directory=DATA_SAMPLES_DIR), name="samples")
+app.mount("/data/uploads", StaticFiles(directory=DATA_UPLOADS_DIR), name="uploads")
 
 class AnalyzeRequest(BaseModel):
     mode: str = "single_image"
@@ -111,6 +114,17 @@ def analyze_satellite_query(req: AnalyzeRequest):
         latency_ms=latency
     )
     
+    # Merge custom metadata (e.g., user uploaded satellite image)
+    if req.metadata:
+        for field in ["filename", "format", "dimensions", "bands", "modality"]:
+            if field in req.metadata and req.metadata[field]:
+                integrated[field] = req.metadata[field]
+        if "file_url" in req.metadata and req.metadata["file_url"]:
+            integrated["custom_image_url"] = req.metadata["file_url"]
+            if integrated.get("evidence") and len(integrated["evidence"]) > 0:
+                integrated["evidence"][0]["url"] = req.metadata["file_url"]
+                integrated["evidence"][0]["label"] = f"Input: {req.metadata.get('filename', 'Custom')}"
+
     # Prepend sample asset paths if needed
     sub_folder = req.mode.lower().replace("-", "_").replace(" ", "_")
     if "bi" in sub_folder:
@@ -148,4 +162,4 @@ async def validate_uploaded_image(
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
