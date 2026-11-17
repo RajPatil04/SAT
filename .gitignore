@@ -44,6 +44,10 @@ node_modules/
 frontend/node_modules/
 .npm
 npm-debug.log*
+.vite/
+frontend/.vite/
+frontend/dist/
+dist/
 
 # IDE & OS files
 .vscode/
