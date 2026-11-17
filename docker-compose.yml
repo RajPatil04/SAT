@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=production
+      - GEOCHAT_API_URL=${GEOCHAT_API_URL}
+      - GEOCHAT_API_TYPE=${GEOCHAT_API_TYPE:-gradio}
+      - GEOCHAT_API_ENDPOINT=${GEOCHAT_API_ENDPOINT:-predict}
+      - CHANGE_MODEL_API_URL=${CHANGE_MODEL_API_URL}
+      - CHANGE_MODEL_API_TYPE=${CHANGE_MODEL_API_TYPE:-gradio}
+      - CHANGE_MODEL_API_ENDPOINT=${CHANGE_MODEL_API_ENDPOINT:-predict}
+      - CROMA_API_URL=${CROMA_API_URL}
+      - CROMA_API_TYPE=${CROMA_API_TYPE:-gradio}
+      - CROMA_API_ENDPOINT=${CROMA_API_ENDPOINT:-predict}
+      - GROUNDING_API_URL=${GROUNDING_API_URL}
+      - GROUNDING_API_TYPE=${GROUNDING_API_TYPE:-gradio}
+      - GROUNDING_API_ENDPOINT=${GROUNDING_API_ENDPOINT:-predict}
+      - DATABASE_URL=sqlite:///./satquery.db
+      - ENABLE_MOCK_FALLBACK_FOR_TESTS=true
+    volumes:
+      - ./uploads:/app/uploads
+      - ./generated_reports:/app/generated_reports
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend

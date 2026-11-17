@@ -1,0 +1,27 @@
+# training/configs/finetune_croma_config.yaml
+# Cross-Modal Adaptation Configuration for CROMA (Optical + SAR Cross-Attention)
+model_name: "CROMA-Joint-Encoders"
+output_dir: "./adapters/croma-finetuned-satquery"
+
+modalities:
+  optical:
+    bands: 12  # Sentinel-2 B1-B12
+    resolution: 10  # meters
+  sar:
+    polarizations: ["VV", "VH"]  # Sentinel-1 IW GRD
+    resolution: 10
+
+fusion_parameters:
+  cross_attention_heads: 8
+  hidden_dimension: 768
+  projection_dim: 512
+  temperature: 0.07
+
+training_parameters:
+  learning_rate: 1.0e-4
+  batch_size: 16
+  num_epochs: 5
+  optimizer: "AdamW"
+  scheduler: "cosine"
+  weight_decay: 0.01
+  loss: "contrastive_cross_entropy"

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SatQuery AI Analysis Report - satquery_1e544941d650</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 40px; }
+        .container { max-width: 960px; margin: 0 auto; background: #1e293b; border-radius: 12px; padding: 32px; border: 1px solid #334155; }
+        h1 { color: #38bdf8; margin-top: 0; border-bottom: 2px solid #0284c7; padding-bottom: 12px; }
+        h2 { color: #7dd3fc; margin-top: 28px; border-bottom: 1px solid #334155; padding-bottom: 8px; }
+        .header-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .badge.completed { background: #065f46; color: #34d399; }
+        .badge.failed { background: #7f1d1d; color: #f87171; }
+        .answer-box { background: #090d16; border-left: 4px solid #38bdf8; padding: 18px; border-radius: 6px; font-size: 16px; line-height: 1.6; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 14px; }
+        th, td { text-align: left; padding: 10px; border-bottom: 1px solid #334155; }
+        th { background: #0f172a; color: #94a3b8; }
+        .meta-box { background: #0f172a; padding: 12px; border-radius: 6px; margin-bottom: 8px; }
+        .meta-box h4 { margin: 0 0 4px 0; color: #38bdf8; }
+        .meta-box p { margin: 0; color: #94a3b8; font-size: 13px; }
+        .footer { margin-top: 40px; font-size: 12px; color: #64748b; text-align: center; border-top: 1px solid #334155; padding-top: 16px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SATQUERY AI - Research Analysis Report</h1>
+        <p style="color: #94a3b8;">An Agentic Vision-Language Framework for Query-Driven Multimodal Remote-Sensing Analysis</p>
+
+        <div class="header-meta">
+            <div><b>Request ID:</b> satquery_1e544941d650</div>
+            <div><b>Timestamp:</b> 2026-10-27T07:37:46.440246</div>
+            <div><b>Total Processing Time:</b> 3453.8 ms</div>
+            <div><b>Detected Task:</b> CHANGE_VQA</div>
+            <div><b>Input Type:</b> BI_TEMPORAL</div>
+            <div><b>Modality:</b> OPTICAL</div>
+        </div>
+
+        <h2>User Query</h2>
+        <div style="font-size: 18px; color: #e2e8f0; font-weight: 500; margin: 12px 0;">"Has the built-up area increased?"</div>
+
+        <h2>Specialist Model Response</h2>
+        <div class="answer-box">
+            <b>Selected Model:</b> ChangeStar<br>
+            <b>Model Confidence:</b> 0.94<br>
+            <b>Router Confidence:</b> N/A<br><br>
+            <b>Grounded Findings:</b><br>
+            ChangeStar detected 0.3376% changed surface area between temporal observations. Evaluated 885 changed pixels out of 262144 total pixels.
+        </div>
+
+        <h2>Evidence & Grounding</h2>
+        <p><b>Summary:</b> Grounded experiment evidence record.</p>
+        
+        
+
+        <h2>Input Raster Metadata</h2>
+        
+
+        <h2>Model Routing Evaluation</h2>
+        <p><b>Routing Rationale:</b></p>
+        <ul>
+            <li>Analyzed query semantics: identified 6 tokens.</li><li>Input classification: BI_TEMPORAL with modality OPTICAL.</li><li>Classified remote sensing task: CHANGE_VQA (confidence: 0.90).</li><li>Selected specialist 'ChangeStar' (ID: changestar) with score 1.000 (Availability: AVAILABLE).</li>
+        </ul>
+        <table>
+            <thead>
+                <tr><th>Model Candidate</th><th>Total Score</th><th>Task Match</th><th>Input Match</th><th>Modality Match</th><th>Availability</th></tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+
+        <h2>Execution Trace</h2>
+        <table>
+            <thead>
+                <tr><th>Step</th><th>Component</th><th>Status</th><th>Duration</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>1</td><td>Input Ingestion</td><td><span class='badge completed'>completed</span></td><td>0.0 ms</td><td>Received 2 raster asset(s) and user query: 'Has the built-up area increased?...'</td></tr><tr><td>2</td><td>Metadata Extraction</td><td><span class='badge completed'>completed</span></td><td>64.3 ms</td><td>Extracted dimensions, bands, and geospatial headers for 2 image(s).</td></tr><tr><td>3</td><td>Compatibility Engine</td><td><span class='badge completed'>completed</span></td><td>28.9 ms</td><td>Evaluated spatial and temporal consistency. Status: Verified.</td></tr><tr><td>4</td><td>Intelligent Router</td><td><span class='badge completed'>completed</span></td><td>0.4 ms</td><td>Task: CHANGE_VQA. Model: ChangeStar.</td></tr><tr><td>5</td><td>Specialist Execution (ChangeStar)</td><td><span class='badge completed'>completed</span></td><td>3359.8 ms</td><td>Specialist inference finished successfully in 3359.34ms.</td></tr><tr><td>6</td><td>Evidence Fusion & Response Generation</td><td><span class='badge completed'>completed</span></td><td>0.0 ms</td><td>Synthesized multi-factor evidence payload, execution trace, and normalized answer.</td></tr>
+            </tbody>
+        </table>
+
+        <div class="footer">
+            Generated autonomously by SatQuery AI Research Framework.
+        </div>
+    </div>
+</body>
+</html>

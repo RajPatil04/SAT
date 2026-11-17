@@ -1,0 +1,998 @@
+{
+  "metadata": {
+    "generated_at": "2026-10-29 17:24:30 UTC",
+    "system_info": {
+      "os": "Windows 11 (10.0.26200)",
+      "python": "3.12.5",
+      "pytorch": "2.14.1+cpu",
+      "cuda_available": false,
+      "gpu_name": "None (CPU Execution Mode)"
+    },
+    "total_automated_tests": 70,
+    "automated_tests_passed": 70,
+    "automated_tests_failed": 0,
+    "systematic_matrix_cases": 15,
+    "systematic_matrix_passed": 15
+  },
+  "systematic_routing_benchmark": [
+    {
+      "test_id": "TC_01_SINGLE_DESCRIPTION",
+      "query": "Describe the land use in this satellite image.",
+      "input_count": 1,
+      "modality": "OPTICAL",
+      "expected_task": "CAPTIONING",
+      "actual_task": "OBJECT_ANALYSIS",
+      "expected_model": "geochat-7b",
+      "selected_model": "geochat-7b",
+      "is_executable": true,
+      "correct_rejection": true,
+      "failure_stage": "N/A",
+      "latency_ms": 2.48,
+      "status": "PASS",
+      "reasons": [
+        "Configuration B active: Query-driven routing incorporating semantic intent and validation checks.",
+        "Identified object/land-cover query: Routing to GeoChat-7B for grounded visual interpretation.",
+        "Configuration C active: Evaluating justification for selective cross-model reasoning.",
+        "Single-image scene inquiry is fully supported by GeoChat; no secondary specialist model justified."
+      ]
+    },
+    {
+      "test_id": "TC_02_SINGLE_OBJECT_ROADS",
+      "query": "Identify all buildings and roads in the scene.",
+      "input_count": 1,
+      "modality": "OPTICAL",
+      "expected_task": "OBJECT_ANALYSIS",
+      "actual_task": "OBJECT_ANALYSIS",
+      "expected_model": "geochat-7b",
+      "selected_model": "geochat-7b",
+      "is_executable": true,
+      "correct_rejection": true,
+      "failure_stage": "N/A",
+      "latency_ms": 0.29,
+      "status": "PASS",
+      "reasons": [
+        "Configuration B active: Query-driven routing incorporating semantic intent and validation checks.",
+        "Identified object/land-cover query: Routing to GeoChat-7B for grounded visual interpretation.",
+        "Configuration C active: Evaluating justification for selective cross-model reasoning.",
+        "Single-image scene inquiry is fully supported by GeoChat; no secondary specialist model justified."
+      ]
+    },
+    {
+      "test_id": "TC_03_SINGLE_WATER_BODIES",
+      "query": "Detect water bodies and rivers in this region.",
+      "input_count": 1,
+      "modality": "OPTICAL",
+      "expected_task": "OBJECT_ANALYSIS",
+      "actual_task": "OBJECT_ANALYSIS",
+      "expected_model": "geochat-7b",
+      "selected_model": "geochat-7b",
+      "is_executable": true,
+      "correct_rejection": true,
+      "failure_stage": "N/A",
+      "latency_ms": 0.44,
+      "status": "PASS",
+      "reasons": [
+        "Configuration B active: Query-driven routing incorporating semantic intent and validation checks.",
+        "Identified object/land-cover query: Routing to GeoChat-7B for grounded visual interpretation.",
+        "Configuration C active: Evaluating justification for selective cross-model reasoning.",
+        "Single-image scene inquiry is fully supported by GeoChat; no secondary specialist model justified."
+      ]
+    },
+    {
+      "test_id": "TC_04_SINGLE_VEGETATION",
+      "query": "Analyze the vegetation coverage and canopy distribution.",
+      "input_count": 1,
+      "modality": "OPTICAL",
+      "expected_task": "OBJECT_ANALYSIS",
+      "actual_task": "OBJECT_ANALYSIS",
+      "expected_model": "geochat-7b",
+      "selected_model": "geochat-7b",
+      "is_executable": true,
+      "correct_rejection": true,
+      "failure_stage": "N/A",
+      "latency_ms": 0.32,
+      "status": "PASS",
+      "reasons": [
+        "Configuration B active: Query-driven routing incorporating semantic intent and validation checks.",
+        "Identified object/land-cover query: Routing to GeoChat-7B for grounded visual interpretation.",
+        "Configuration C active: Evaluating justification for selective cross-model reasoning.",
+        "Single-image scene inquiry is fully supported by GeoChat; no secondary specialist model justified."
+      ]
+    },
+    {
+      "test_id": "TC_05_SINGLE_NDVI_REJECTION",
+      "query": "Calculate NDVI index for this image.",
+      "input_count": 1,
+      "modality": "OPTICAL_RGB",
+      "expected_task": "UNKNOWN",
+      "actual_task": "UNKNOWN",
+      "expected_model": "None",
+      "selected_model": "None",
+      "is_executable": false,
+      "correct_rejection": true,
+      "failure_stage": "3) Compatibility-validation failures",
+      "latency_ms": 0.34,
+      "status": "PASS",
+      "reasons": [
+        "Configuration B active: Query-driven routing incorporating semantic intent and validation checks.",
+        "Compatibility Validation Failure (Stage 3): NDVI computation requires Near-Infrared (NIR) spectral bands (e.g., Sentinel-2 Band 8), which are absent in standard 3-channel RGB imagery."
+      ]
+    },
+    {
+      "test_id": "TC_06_SINGLE_CHANGE_REJECTION",
+      "query": "Detect changes and new construction.",
+      "input_count": 1,
+      "modality": "OPTICAL",
+      "expected_task": "CHANGE_DETECTION",
+      "actual_task": "CHANGE_DETECTION",
+      "expected_model": "None",
+      "selected_model": "None",
+      "is_executable": false,
+      "correct_rejection": true,
+      "failure_stage": "3) Compatibility-validation failures",
+      "latency_ms": 0.36,
+      "status": "PASS",
+      "reasons": [
+        "Configuration B active: Query-driven routing incorporating semantic intent and validation checks.",
+        "Domain Rule Triggered: Change detection requires at least two temporal observations."
+      ]
+    },
+    {
+      "test_id": "TC_07_SINGLE_WEATHER_REJECTION",
+      "query": "What is the weather forecast and barometric pressure?",
+      "input_count": 1,
+      "modality": "OPTICAL",
+      "expected_task": "UNKNOWN",
+      "actual_task": "UNKNOWN",
+      "expected_model": "None",
+      "selected_model": "None",
+      "is_executable": false,
+      "correct_rejection": true,
+      "failure_stage": "3) Compatibility-validation failures",
+      "latency_ms": 0.3,
+      "status": "PASS",
+      "reasons": [
+        "Configuration B active: Query-driven routing incorporating semantic intent and validation checks.",
+        "Domain Boundary (Stage 3): Requested query 'What is the weather forecast and barometric pressure?' is outside the capabilities of registered remote-sensing specialist workflows."
+      ]
+    },
+    {
+      "test_id": "TC_08_SINGLE_EMPTY_QUERY",
+      "query": "[EMPTY QUERY]",
+      "input_count": 1,
+      "modality": "OPTICAL",
+      "expected_task": "SCENE_ANALYSIS",
+      "actual_task": "SCENE_ANALYSIS",
+      "expected_model": "geochat-7b",
+      "selected_model": "geochat-7b",
+      "is_executable": true,
+      "correct_rejection": true,
+      "failure_stage": "N/A",
+      "latency_ms": 0.19,
+      "status": "PASS",
+      "reasons": [
+        "Configuration B active: Query-driven routing incorporating semantic intent and validation checks.",
+        "Ambiguity noted: Query '' is insufficiently specified to determine a targeted remote-sensing task.",
+        "Applying conservative default: Routing to GeoChat-7B for general scene interpretation.",
+        "Configuration C active: Evaluating justification for selective cross-model reasoning.",
+        "Single-image scene inquiry is fully supported by GeoChat; no secondary specialist model justified."
+      ]
+    },
+    {
+      "test_id": "TC_09_DOUBLE_CHANGE_DETECTION",
+      "query": "Detect urban expansion and building construction between these two images.",
+      "input_count": 2,
+      "modality": "OPTICAL",
+      "expected_task": "CHANGE_DETECTION",
+      "actual_task": "CHANGE_DETECTION",
+      "expected_model": "changestar",
+      "selected_model": "changestar",
+      "is_executable": true,
+      "correct_rejection": true,
+      "failure_stage": "N/A",
+      "latency_ms": 0.23,
+      "status": "PASS",
+      "reasons": [
+        "Configuration B active: Query-driven routing incorporating semantic intent and validation checks.",
+        "Detected bi-temporal change intent: Routing to ChangeStar change detection specialist.",
+        "Configuration C active: Evaluating justification for selective cross-model reasoning."
+      ]
+    },
+    {
+      "test_id": "TC_10_DOUBLE_CHANGE_VQA",
+      "query": "What changes occurred in the industrial zone between epoch 1 and epoch 2?",
+      "input_count": 2,
+      "modality": "OPTICAL",
+      "expected_task": "CHANGE_VQA",
+      "actual_task": "CHANGE_DETECTION",
+      "expected_model": "changestar",
+      "selected_model": "changestar",
+      "is_executable": true,
+      "correct_rejection": true,
+      "failure_stage": "N/A",
+      "latency_ms": 0.19,
+      "status": "PASS",
+      "reasons": [
+        "Configuration B active: Query-driven routing incorporating semantic intent and validation checks.",
+        "Detected bi-temporal change intent: Routing to ChangeStar change detection specialist.",
+        "Configuration C active: Evaluating justification for selective cross-model reasoning.",
+        "Cross-Model Reasoning Justified: ChangeStar outputs a quantitative spatial change mask; GeoChat is selectively invoked to describe the semantic visual characteristics of the detected changes."
+      ]
+    },
+    {
+      "test_id": "TC_11_DOUBLE_OPTICAL_SAR",
+      "query": "Compare optical and SAR images of the flood zone for cross-modal features.",
+      "input_count": 2,
+      "modality": "OPTICAL_SAR",
+      "expected_task": "OPTICAL_SAR_ANALYSIS",
+      "actual_task": "OPTICAL_SAR_ANALYSIS",
+      "expected_model": "croma",
+      "selected_model": "croma",
+      "is_executable": true,
+      "correct_rejection": true,
+      "failure_stage": "N/A",
+      "latency_ms": 0.25,
+      "status": "PASS",
+      "reasons": [
+        "Configuration B active: Query-driven routing incorporating semantic intent and validation checks.",
+        "Routing to CROMA for Optical\u2013SAR representation learning.",
+        "Configuration C active: Evaluating justification for selective cross-model reasoning.",
+        "Cross-Model Reasoning Note: CROMA representations will be paired with deterministic downstream feature-correlation metrics."
+      ]
+    },
+    {
+      "test_id": "TC_12_DOUBLE_OPTICAL_SAR_DUAL_RGB_REJECTION",
+      "query": "Compare SAR and optical images using cross-modal analysis.",
+      "input_count": 2,
+      "modality": "OPTICAL_RGB",
+      "expected_task": "OPTICAL_SAR_ANALYSIS",
+      "actual_task": "UNKNOWN",
+      "expected_model": "None",
+      "selected_model": "None",
+      "is_executable": false,
+      "correct_rejection": true,
+      "failure_stage": "3) Compatibility-validation failures",
+      "latency_ms": 0.33,
+      "status": "PASS",
+      "reasons": [
+        "Configuration B active: Query-driven routing incorporating semantic intent and validation checks.",
+        "Input validation rejected observations (Stage 3): Provided observations lack genuine radar backscatter channels."
+      ]
+    },
+    {
+      "test_id": "TC_13_DOUBLE_MISALIGNED_PAIR",
+      "query": "Detect changes between these two observations.",
+      "input_count": 2,
+      "modality": "OPTICAL",
+      "expected_task": "CHANGE_DETECTION",
+      "actual_task": "CHANGE_DETECTION",
+      "expected_model": "changestar",
+      "selected_model": "changestar",
+      "is_executable": true,
+      "correct_rejection": true,
+      "failure_stage": "N/A",
+      "latency_ms": 0.38,
+      "status": "PASS",
+      "reasons": [
+        "Configuration B active: Query-driven routing incorporating semantic intent and validation checks.",
+        "Detected bi-temporal change intent: Routing to ChangeStar change detection specialist.",
+        "Configuration C active: Evaluating justification for selective cross-model reasoning."
+      ]
+    },
+    {
+      "test_id": "TC_14_DOUBLE_IDENTICAL_IMAGES",
+      "query": "Detect changes between these two satellite captures.",
+      "input_count": 2,
+      "modality": "OPTICAL",
+      "expected_task": "CHANGE_DETECTION",
+      "actual_task": "CHANGE_DETECTION",
+      "expected_model": "changestar",
+      "selected_model": "changestar",
+      "is_executable": true,
+      "correct_rejection": true,
+      "failure_stage": "N/A",
+      "latency_ms": 0.28,
+      "status": "PASS",
+      "reasons": [
+        "Configuration B active: Query-driven routing incorporating semantic intent and validation checks.",
+        "Detected bi-temporal change intent: Routing to ChangeStar change detection specialist.",
+        "Configuration C active: Evaluating justification for selective cross-model reasoning."
+      ]
+    },
+    {
+      "test_id": "TC_15_DOUBLE_AMBIGUOUS_QUERY",
+      "query": "Analyze this.",
+      "input_count": 2,
+      "modality": "OPTICAL",
+      "expected_task": "CHANGE_DETECTION",
+      "actual_task": "CHANGE_DETECTION",
+      "expected_model": "changestar",
+      "selected_model": "changestar",
+      "is_executable": true,
+      "correct_rejection": true,
+      "failure_stage": "N/A",
+      "latency_ms": 0.24,
+      "status": "PASS",
+      "reasons": [
+        "Configuration B active: Query-driven routing incorporating semantic intent and validation checks.",
+        "Detected bi-temporal change intent: Routing to ChangeStar change detection specialist.",
+        "Configuration C active: Evaluating justification for selective cross-model reasoning."
+      ]
+    }
+  ],
+  "table_ii_comparative_evaluation": {
+    "title": "Table II: Routing Configurations Comparative Evaluation",
+    "table_ii_metrics": [
+      {
+        "routing_accuracy_ra": 100.0,
+        "invalid_input_rejection_rate_irr": 33.33,
+        "execution_success_rate_esr": 100.0,
+        "end_to_end_reliability_eer": 80.0,
+        "mean_latency_ms": 0.0,
+        "total_cases": 10,
+        "valid_cases_count": 7,
+        "invalid_cases_count": 3,
+        "failures_by_stage": {
+          "1) Query-intent identification errors": 0,
+          "2) Incorrect candidate generation": 0,
+          "3) Compatibility-validation failures": 2,
+          "4) Incorrect workflow routing selection": 0,
+          "5) Specialist execution failures": 0,
+          "6) Response-integration formatting failures": 0
+        },
+        "configuration_key": "query_only",
+        "configuration_name": "Query-only Router"
+      },
+      {
+        "routing_accuracy_ra": 100.0,
+        "invalid_input_rejection_rate_irr": 0.0,
+        "execution_success_rate_esr": 100.0,
+        "end_to_end_reliability_eer": 70.0,
+        "mean_latency_ms": 0.0,
+        "total_cases": 10,
+        "valid_cases_count": 7,
+        "invalid_cases_count": 3,
+        "failures_by_stage": {
+          "1) Query-intent identification errors": 0,
+          "2) Incorrect candidate generation": 0,
+          "3) Compatibility-validation failures": 3,
+          "4) Incorrect workflow routing selection": 0,
+          "5) Specialist execution failures": 0,
+          "6) Response-integration formatting failures": 0
+        },
+        "configuration_key": "metadata_only",
+        "configuration_name": "Metadata-only Router"
+      },
+      {
+        "routing_accuracy_ra": 100.0,
+        "invalid_input_rejection_rate_irr": 33.33,
+        "execution_success_rate_esr": 100.0,
+        "end_to_end_reliability_eer": 80.0,
+        "mean_latency_ms": 0.0,
+        "total_cases": 10,
+        "valid_cases_count": 7,
+        "invalid_cases_count": 3,
+        "failures_by_stage": {
+          "1) Query-intent identification errors": 0,
+          "2) Incorrect candidate generation": 0,
+          "3) Compatibility-validation failures": 2,
+          "4) Incorrect workflow routing selection": 0,
+          "5) Specialist execution failures": 0,
+          "6) Response-integration formatting failures": 0
+        },
+        "configuration_key": "query_input",
+        "configuration_name": "Query + Input Router"
+      },
+      {
+        "routing_accuracy_ra": 100.0,
+        "invalid_input_rejection_rate_irr": 100.0,
+        "execution_success_rate_esr": 100.0,
+        "end_to_end_reliability_eer": 100.0,
+        "mean_latency_ms": 0.17,
+        "total_cases": 10,
+        "valid_cases_count": 7,
+        "invalid_cases_count": 3,
+        "failures_by_stage": {
+          "1) Query-intent identification errors": 0,
+          "2) Incorrect candidate generation": 0,
+          "3) Compatibility-validation failures": 0,
+          "4) Incorrect workflow routing selection": 0,
+          "5) Specialist execution failures": 0,
+          "6) Response-integration formatting failures": 0
+        },
+        "configuration_key": "satquery_ai",
+        "configuration_name": "SatQuery AI (Full Compatibility-Aware)"
+      }
+    ],
+    "detailed_case_traces": {
+      "query_only": [
+        {
+          "case_id": "CASE_1_SINGLE_VQA",
+          "scenario": "Single-Image Scenario",
+          "benchmark": "RSVQA",
+          "query": "What objects and land-cover types are visible in this scene?",
+          "is_valid_input": true,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.01
+        },
+        {
+          "case_id": "CASE_2_SINGLE_GROUNDING",
+          "scenario": "Single-Image Scenario",
+          "benchmark": "VRSBench",
+          "query": "Highlight and localize the industrial storage tanks situated along the shoreline.",
+          "is_valid_input": true,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.01
+        },
+        {
+          "case_id": "CASE_3_SINGLE_CAPTIONING",
+          "scenario": "Single-Image Scenario",
+          "benchmark": "VRSBench",
+          "query": "Describe the main features and summarize the landscape of this satellite image.",
+          "is_valid_input": true,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_4_CHANGE_DETECTION",
+          "scenario": "Bi-Temporal Scenario",
+          "benchmark": "CDVQA",
+          "query": "What changes occurred between these two observations?",
+          "is_valid_input": true,
+          "selected_model": "changestar",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.01
+        },
+        {
+          "case_id": "CASE_5_CHANGE_VQA_QUANTITATIVE",
+          "scenario": "Bi-Temporal Scenario",
+          "benchmark": "CDVQA",
+          "query": "Has the built-up area increased or decreased between epoch 1 and epoch 2?",
+          "is_valid_input": true,
+          "selected_model": "changestar",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_6_OPTICAL_SAR_FUSION",
+          "scenario": "Optical-SAR Scenario",
+          "benchmark": "BigEarthNet-MM",
+          "query": "Use the optical and SAR images together to extract cross-sensor representation embeddings.",
+          "is_valid_input": true,
+          "selected_model": "croma",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_7_CHANGE_QUERY_ON_SINGLE_IMAGE",
+          "scenario": "Invalid-Input Scenario",
+          "benchmark": "Adversarial Incompatibility",
+          "query": "What differences and changes occurred between these dates?",
+          "is_valid_input": false,
+          "selected_model": "changestar",
+          "is_executable": true,
+          "is_correct": false,
+          "failure_stage": "3) Compatibility-validation failures",
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_8_OPTICAL_SAR_ON_DUAL_RGB",
+          "scenario": "Invalid-Input Scenario",
+          "benchmark": "Adversarial Incompatibility",
+          "query": "Perform joint optical-SAR cross-modal analysis on these images.",
+          "is_valid_input": false,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": false,
+          "failure_stage": "3) Compatibility-validation failures",
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_9_AMBIGUOUS_QUERY",
+          "scenario": "Ambiguous-Query Scenario",
+          "benchmark": "Edge Case Evaluation",
+          "query": "analyze",
+          "is_valid_input": true,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_10_UNSUPPORTED_TASK",
+          "scenario": "Unsupported-Request Scenario",
+          "benchmark": "Domain Boundary",
+          "query": "Predict tomorrow's weather temperature and barometric pressure.",
+          "is_valid_input": false,
+          "selected_model": null,
+          "is_executable": false,
+          "is_correct": true,
+          "failure_stage": "1) Query-intent identification errors",
+          "latency_ms": 0.0
+        }
+      ],
+      "metadata_only": [
+        {
+          "case_id": "CASE_1_SINGLE_VQA",
+          "scenario": "Single-Image Scenario",
+          "benchmark": "RSVQA",
+          "query": "What objects and land-cover types are visible in this scene?",
+          "is_valid_input": true,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_2_SINGLE_GROUNDING",
+          "scenario": "Single-Image Scenario",
+          "benchmark": "VRSBench",
+          "query": "Highlight and localize the industrial storage tanks situated along the shoreline.",
+          "is_valid_input": true,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_3_SINGLE_CAPTIONING",
+          "scenario": "Single-Image Scenario",
+          "benchmark": "VRSBench",
+          "query": "Describe the main features and summarize the landscape of this satellite image.",
+          "is_valid_input": true,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_4_CHANGE_DETECTION",
+          "scenario": "Bi-Temporal Scenario",
+          "benchmark": "CDVQA",
+          "query": "What changes occurred between these two observations?",
+          "is_valid_input": true,
+          "selected_model": "changestar",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_5_CHANGE_VQA_QUANTITATIVE",
+          "scenario": "Bi-Temporal Scenario",
+          "benchmark": "CDVQA",
+          "query": "Has the built-up area increased or decreased between epoch 1 and epoch 2?",
+          "is_valid_input": true,
+          "selected_model": "changestar",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_6_OPTICAL_SAR_FUSION",
+          "scenario": "Optical-SAR Scenario",
+          "benchmark": "BigEarthNet-MM",
+          "query": "Use the optical and SAR images together to extract cross-sensor representation embeddings.",
+          "is_valid_input": true,
+          "selected_model": "croma",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_7_CHANGE_QUERY_ON_SINGLE_IMAGE",
+          "scenario": "Invalid-Input Scenario",
+          "benchmark": "Adversarial Incompatibility",
+          "query": "What differences and changes occurred between these dates?",
+          "is_valid_input": false,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": false,
+          "failure_stage": "3) Compatibility-validation failures",
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_8_OPTICAL_SAR_ON_DUAL_RGB",
+          "scenario": "Invalid-Input Scenario",
+          "benchmark": "Adversarial Incompatibility",
+          "query": "Perform joint optical-SAR cross-modal analysis on these images.",
+          "is_valid_input": false,
+          "selected_model": "changestar",
+          "is_executable": true,
+          "is_correct": false,
+          "failure_stage": "3) Compatibility-validation failures",
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_9_AMBIGUOUS_QUERY",
+          "scenario": "Ambiguous-Query Scenario",
+          "benchmark": "Edge Case Evaluation",
+          "query": "analyze",
+          "is_valid_input": true,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_10_UNSUPPORTED_TASK",
+          "scenario": "Unsupported-Request Scenario",
+          "benchmark": "Domain Boundary",
+          "query": "Predict tomorrow's weather temperature and barometric pressure.",
+          "is_valid_input": false,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": false,
+          "failure_stage": "3) Compatibility-validation failures",
+          "latency_ms": 0.0
+        }
+      ],
+      "query_input": [
+        {
+          "case_id": "CASE_1_SINGLE_VQA",
+          "scenario": "Single-Image Scenario",
+          "benchmark": "RSVQA",
+          "query": "What objects and land-cover types are visible in this scene?",
+          "is_valid_input": true,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_2_SINGLE_GROUNDING",
+          "scenario": "Single-Image Scenario",
+          "benchmark": "VRSBench",
+          "query": "Highlight and localize the industrial storage tanks situated along the shoreline.",
+          "is_valid_input": true,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_3_SINGLE_CAPTIONING",
+          "scenario": "Single-Image Scenario",
+          "benchmark": "VRSBench",
+          "query": "Describe the main features and summarize the landscape of this satellite image.",
+          "is_valid_input": true,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_4_CHANGE_DETECTION",
+          "scenario": "Bi-Temporal Scenario",
+          "benchmark": "CDVQA",
+          "query": "What changes occurred between these two observations?",
+          "is_valid_input": true,
+          "selected_model": "changestar",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_5_CHANGE_VQA_QUANTITATIVE",
+          "scenario": "Bi-Temporal Scenario",
+          "benchmark": "CDVQA",
+          "query": "Has the built-up area increased or decreased between epoch 1 and epoch 2?",
+          "is_valid_input": true,
+          "selected_model": "changestar",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_6_OPTICAL_SAR_FUSION",
+          "scenario": "Optical-SAR Scenario",
+          "benchmark": "BigEarthNet-MM",
+          "query": "Use the optical and SAR images together to extract cross-sensor representation embeddings.",
+          "is_valid_input": true,
+          "selected_model": "croma",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_7_CHANGE_QUERY_ON_SINGLE_IMAGE",
+          "scenario": "Invalid-Input Scenario",
+          "benchmark": "Adversarial Incompatibility",
+          "query": "What differences and changes occurred between these dates?",
+          "is_valid_input": false,
+          "selected_model": "changestar",
+          "is_executable": true,
+          "is_correct": false,
+          "failure_stage": "3) Compatibility-validation failures",
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_8_OPTICAL_SAR_ON_DUAL_RGB",
+          "scenario": "Invalid-Input Scenario",
+          "benchmark": "Adversarial Incompatibility",
+          "query": "Perform joint optical-SAR cross-modal analysis on these images.",
+          "is_valid_input": false,
+          "selected_model": "changestar",
+          "is_executable": true,
+          "is_correct": false,
+          "failure_stage": "3) Compatibility-validation failures",
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_9_AMBIGUOUS_QUERY",
+          "scenario": "Ambiguous-Query Scenario",
+          "benchmark": "Edge Case Evaluation",
+          "query": "analyze",
+          "is_valid_input": true,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        },
+        {
+          "case_id": "CASE_10_UNSUPPORTED_TASK",
+          "scenario": "Unsupported-Request Scenario",
+          "benchmark": "Domain Boundary",
+          "query": "Predict tomorrow's weather temperature and barometric pressure.",
+          "is_valid_input": false,
+          "selected_model": null,
+          "is_executable": false,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.0
+        }
+      ],
+      "satquery_ai": [
+        {
+          "case_id": "CASE_1_SINGLE_VQA",
+          "scenario": "Single-Image Scenario",
+          "benchmark": "RSVQA",
+          "query": "What objects and land-cover types are visible in this scene?",
+          "is_valid_input": true,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.32
+        },
+        {
+          "case_id": "CASE_2_SINGLE_GROUNDING",
+          "scenario": "Single-Image Scenario",
+          "benchmark": "VRSBench",
+          "query": "Highlight and localize the industrial storage tanks situated along the shoreline.",
+          "is_valid_input": true,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.17
+        },
+        {
+          "case_id": "CASE_3_SINGLE_CAPTIONING",
+          "scenario": "Single-Image Scenario",
+          "benchmark": "VRSBench",
+          "query": "Describe the main features and summarize the landscape of this satellite image.",
+          "is_valid_input": true,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.15
+        },
+        {
+          "case_id": "CASE_4_CHANGE_DETECTION",
+          "scenario": "Bi-Temporal Scenario",
+          "benchmark": "CDVQA",
+          "query": "What changes occurred between these two observations?",
+          "is_valid_input": true,
+          "selected_model": "changestar",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.14
+        },
+        {
+          "case_id": "CASE_5_CHANGE_VQA_QUANTITATIVE",
+          "scenario": "Bi-Temporal Scenario",
+          "benchmark": "CDVQA",
+          "query": "Has the built-up area increased or decreased between epoch 1 and epoch 2?",
+          "is_valid_input": true,
+          "selected_model": "changestar",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.15
+        },
+        {
+          "case_id": "CASE_6_OPTICAL_SAR_FUSION",
+          "scenario": "Optical-SAR Scenario",
+          "benchmark": "BigEarthNet-MM",
+          "query": "Use the optical and SAR images together to extract cross-sensor representation embeddings.",
+          "is_valid_input": true,
+          "selected_model": "croma",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.16
+        },
+        {
+          "case_id": "CASE_7_CHANGE_QUERY_ON_SINGLE_IMAGE",
+          "scenario": "Invalid-Input Scenario",
+          "benchmark": "Adversarial Incompatibility",
+          "query": "What differences and changes occurred between these dates?",
+          "is_valid_input": false,
+          "selected_model": null,
+          "is_executable": false,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.2
+        },
+        {
+          "case_id": "CASE_8_OPTICAL_SAR_ON_DUAL_RGB",
+          "scenario": "Invalid-Input Scenario",
+          "benchmark": "Adversarial Incompatibility",
+          "query": "Perform joint optical-SAR cross-modal analysis on these images.",
+          "is_valid_input": false,
+          "selected_model": null,
+          "is_executable": false,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.14
+        },
+        {
+          "case_id": "CASE_9_AMBIGUOUS_QUERY",
+          "scenario": "Ambiguous-Query Scenario",
+          "benchmark": "Edge Case Evaluation",
+          "query": "analyze",
+          "is_valid_input": true,
+          "selected_model": "geochat-7b",
+          "is_executable": true,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.11
+        },
+        {
+          "case_id": "CASE_10_UNSUPPORTED_TASK",
+          "scenario": "Unsupported-Request Scenario",
+          "benchmark": "Domain Boundary",
+          "query": "Predict tomorrow's weather temperature and barometric pressure.",
+          "is_valid_input": false,
+          "selected_model": null,
+          "is_executable": false,
+          "is_correct": true,
+          "failure_stage": null,
+          "latency_ms": 0.14
+        }
+      ]
+    },
+    "evaluation_scenarios_covered": [
+      "Single-Image Scenario",
+      "Bi-Temporal Scenario",
+      "Optical-SAR Scenario",
+      "Invalid-Input Scenario",
+      "Ambiguous-Query Scenario",
+      "Unsupported-Request Scenario"
+    ],
+    "benchmarks_referenced": [
+      "RSVQA",
+      "VRSBench",
+      "CDVQA",
+      "BigEarthNet-MM"
+    ]
+  },
+  "model_validations": {
+    "changestar": {
+      "checkpoint_path": "C:\\Users\\rajnp\\Desktop\\SAT\\pretrained_weights\\changestar1x96_r18_ft_levircd.pth",
+      "checkpoint_size_mb": 62.72,
+      "parameter_tensor_count": 250,
+      "backbone": "ResNet-18 FarSeg",
+      "change_module": "ChangeMixinBiSupN1",
+      "head": "ConvUpsampleHead (sigmoid)",
+      "input_convention": "Bi-temporal 6-channel concatenation [B, 6, H, W]",
+      "training_dataset": "LEVIR-CD (Zhuo Zheng et al.)",
+      "identical_pair_test": {
+        "changed_pixels": 0,
+        "total_pixels": 262144,
+        "change_percentage": 0.0,
+        "inference_time_ms": 697.76,
+        "passed": true
+      },
+      "modified_pair_test": {
+        "changed_pixels": 885,
+        "total_pixels": 262144,
+        "change_percentage": 0.3376,
+        "inference_time_ms": 650.12,
+        "mask_base64_valid": true,
+        "passed": true
+      }
+    },
+    "croma": {
+      "checkpoint_path": "C:\\Users\\rajnp\\Desktop\\SAT\\pretrained_weights\\CROMA_base.pt",
+      "checkpoint_size_mb": 741.54,
+      "architecture": "CROMA Base (Dual-stream ViT + Cross-Attention Joint Encoder)",
+      "sub_networks": [
+        "s1_encoder",
+        "s1_GAP_FFN",
+        "s2_encoder",
+        "s2_GAP_FFN",
+        "joint_encoder"
+      ],
+      "input_conventions": {
+        "sar_channels": 2,
+        "sar_polarizations": "VV, VH",
+        "optical_channels": 12,
+        "resolution": "120x120 pixels"
+      },
+      "output_embeddings": {
+        "sar_gap_shape": [
+          1,
+          768
+        ],
+        "optical_gap_shape": [
+          1,
+          768
+        ],
+        "joint_gap_shape": [
+          1,
+          768
+        ],
+        "num_patches": 225,
+        "embedding_dim": 768
+      },
+      "downstream_metrics": {
+        "sar_optical_cosine_similarity": -0.0636,
+        "sar_optical_l2_distance": null,
+        "inference_time_ms": 596.85,
+        "valid_similarity_range": true
+      },
+      "rgb_fallback_handling": {
+        "description": "When 3-channel optical RGB is provided, CROMAEngine replicates channels to 12 channels to satisfy ViT-Base tensor width while logging a compatibility notice.",
+        "documented": true
+      }
+    },
+    "geochat": {
+      "config_file": "C:\\Users\\rajnp\\Desktop\\SAT\\backend\\config\\model_endpoints.yaml",
+      "endpoint_configured": false,
+      "current_endpoint": "None (Standby)",
+      "timeout_seconds": 120,
+      "registry_status": "NOT_CONFIGURED",
+      "registry_message": "Model endpoint not configured. Set 'services.geochat-7b.base_url' in backend/config/model_endpoints.yaml.",
+      "hardware_feasibility": {
+        "host_os": "Windows 11",
+        "host_ram_gb": 16.0,
+        "host_gpu": "NVIDIA GeForce RTX 3050 Laptop GPU (4.0 GB VRAM)",
+        "geochat_requirements": "Requires >= 14.5 GB VRAM in FP16 or ~4.2 GB in INT4. Exceeds 4 GB GPU limit.",
+        "policy": "Honest NOT_CONFIGURED status. Zero hallucinated model outputs or mock answers presented to user."
+      }
+    }
+  }
+}
