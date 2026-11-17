@@ -1,0 +1,51 @@
+# SatQuery AI - Authoritative Model Endpoints and Service Configuration
+# Section 3: Central Configuration File
+# This is the single authoritative configuration file for all specialist model service endpoints.
+# To change the GeoChat endpoint, edit 'services.geochat.base_url' below.
+# No changes to React components, routing logic, or model adapters are required.
+
+services:
+  geochat:
+    base_url: "https://REPLACE-WITH-ACTUAL-GEOCHAT-ENDPOINT"
+    api_type: "gradio" # 'gradio' or 'rest'
+    api_name: "predict"
+    timeout_seconds: 180
+    enabled: true
+
+  changestar:
+    base_url: "http://127.0.0.1:8001"
+    api_type: "rest"
+    analyze_path: "/predict"
+    timeout_seconds: 180
+    enabled: true
+
+  croma:
+    base_url: "http://127.0.0.1:8002"
+    api_type: "rest"
+    analyze_path: "/predict"
+    timeout_seconds: 180
+    enabled: true
+
+  grounding:
+    base_url: ""
+    api_type: "rest"
+    analyze_path: "/predict"
+    timeout_seconds: 180
+    enabled: false
+
+routing:
+  default_strategy: "query_driven"
+  enable_cross_model_reasoning: true
+
+inference:
+  allow_mock_models: false
+  verify_service_before_inference: true
+
+language_generation:
+  provider: "none" # 'none', 'openai', 'anthropic', 'gemini', 'ollama', or 'rest'
+  base_url: ""
+  model: ""
+  api_key_env_var: "LLM_API_KEY"
+  timeout_seconds: 30
+  enabled: false
+

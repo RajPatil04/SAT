@@ -1,0 +1,16 @@
+Test ID,Query,Input Count,Modality,Expected Task,Actual Task,Expected Model,Selected Model,Is Executable,Correct Rejection,Failure Stage,Latency (ms)
+TC_01_SINGLE_DESCRIPTION,Describe the land use in this satellite image.,1,OPTICAL,CAPTIONING,OBJECT_ANALYSIS,geochat-7b,geochat-7b,True,True,N/A,2.48
+TC_02_SINGLE_OBJECT_ROADS,Identify all buildings and roads in the scene.,1,OPTICAL,OBJECT_ANALYSIS,OBJECT_ANALYSIS,geochat-7b,geochat-7b,True,True,N/A,0.29
+TC_03_SINGLE_WATER_BODIES,Detect water bodies and rivers in this region.,1,OPTICAL,OBJECT_ANALYSIS,OBJECT_ANALYSIS,geochat-7b,geochat-7b,True,True,N/A,0.44
+TC_04_SINGLE_VEGETATION,Analyze the vegetation coverage and canopy distribution.,1,OPTICAL,OBJECT_ANALYSIS,OBJECT_ANALYSIS,geochat-7b,geochat-7b,True,True,N/A,0.32
+TC_05_SINGLE_NDVI_REJECTION,Calculate NDVI index for this image.,1,OPTICAL_RGB,UNKNOWN,UNKNOWN,None,None,False,True,3) Compatibility-validation failures,0.34
+TC_06_SINGLE_CHANGE_REJECTION,Detect changes and new construction.,1,OPTICAL,CHANGE_DETECTION,CHANGE_DETECTION,None,None,False,True,3) Compatibility-validation failures,0.36
+TC_07_SINGLE_WEATHER_REJECTION,What is the weather forecast and barometric pressure?,1,OPTICAL,UNKNOWN,UNKNOWN,None,None,False,True,3) Compatibility-validation failures,0.3
+TC_08_SINGLE_EMPTY_QUERY,[EMPTY QUERY],1,OPTICAL,SCENE_ANALYSIS,SCENE_ANALYSIS,geochat-7b,geochat-7b,True,True,N/A,0.19
+TC_09_DOUBLE_CHANGE_DETECTION,Detect urban expansion and building construction between these two images.,2,OPTICAL,CHANGE_DETECTION,CHANGE_DETECTION,changestar,changestar,True,True,N/A,0.23
+TC_10_DOUBLE_CHANGE_VQA,What changes occurred in the industrial zone between epoch 1 and epoch 2?,2,OPTICAL,CHANGE_VQA,CHANGE_DETECTION,changestar,changestar,True,True,N/A,0.19
+TC_11_DOUBLE_OPTICAL_SAR,Compare optical and SAR images of the flood zone for cross-modal features.,2,OPTICAL_SAR,OPTICAL_SAR_ANALYSIS,OPTICAL_SAR_ANALYSIS,croma,croma,True,True,N/A,0.25
+TC_12_DOUBLE_OPTICAL_SAR_DUAL_RGB_REJECTION,Compare SAR and optical images using cross-modal analysis.,2,OPTICAL_RGB,OPTICAL_SAR_ANALYSIS,UNKNOWN,None,None,False,True,3) Compatibility-validation failures,0.33
+TC_13_DOUBLE_MISALIGNED_PAIR,Detect changes between these two observations.,2,OPTICAL,CHANGE_DETECTION,CHANGE_DETECTION,changestar,changestar,True,True,N/A,0.38
+TC_14_DOUBLE_IDENTICAL_IMAGES,Detect changes between these two satellite captures.,2,OPTICAL,CHANGE_DETECTION,CHANGE_DETECTION,changestar,changestar,True,True,N/A,0.28
+TC_15_DOUBLE_AMBIGUOUS_QUERY,Analyze this.,2,OPTICAL,CHANGE_DETECTION,CHANGE_DETECTION,changestar,changestar,True,True,N/A,0.24

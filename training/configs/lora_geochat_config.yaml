@@ -1,0 +1,38 @@
+# training/configs/lora_geochat_config.yaml
+# Parameter-Efficient Fine-Tuning (PEFT / LoRA) configuration for GeoChat adaptation
+base_model: "MBZUAI/geochat-7b"
+output_dir: "./adapters/geochat-lora-satquery"
+
+lora_parameters:
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  bias: "none"
+  task_type: "CAUSAL_LM"
+  target_modules:
+    - "q_proj"
+    - "v_proj"
+    - "k_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+training_arguments:
+  learning_rate: 2.0e-5
+  per_device_train_batch_size: 4
+  gradient_accumulation_steps: 4
+  num_train_epochs: 3
+  warmup_ratio: 0.03
+  weight_decay: 0.0
+  fp16: true
+  logging_steps: 10
+  save_strategy: "epoch"
+  evaluation_strategy: "steps"
+  eval_steps: 100
+  dataloader_num_workers: 4
+
+data_config:
+  dataset_name: "RSVQAxBEN"
+  image_aspect_ratio: "pad"
+  max_sequence_length: 2048

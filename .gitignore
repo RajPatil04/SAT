@@ -1,0 +1,54 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Pytest / Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local databases
+satquery.db
+*.sqlite
+*.sqlite3
+*.db
+
+# Runtime uploads (preserve sample_data)
+uploads/*
+!uploads/.gitkeep
+!uploads/sample_data/
+!uploads/sample_data/*
+
+# Pretrained model weights (GitHub 100MB file limit)
+# Engines automatically download weights on demand from Hugging Face / GitHub releases
+pretrained_weights/*.pt
+pretrained_weights/*.pth
+!pretrained_weights/.gitkeep
+
+# Node / Frontend
+node_modules/
+frontend/node_modules/
+.npm
+npm-debug.log*
+
+# IDE & OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db

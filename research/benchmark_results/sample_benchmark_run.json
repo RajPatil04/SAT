@@ -1,0 +1,88 @@
+{
+  "benchmark_suite_version": "1.0.0",
+  "routing_formulation": "Score(q, m) = w1*TaskMatch + w2*InputTypeMatch + w3*ModalityMatch + w4*CapabilityMatch + w5*Compatibility + w6*Availability",
+  "weights": {
+    "w1_task_match": 0.25,
+    "w2_input_type_match": 0.20,
+    "w3_modality_match": 0.15,
+    "w4_capability_match": 0.15,
+    "w5_compatibility": 0.15,
+    "w6_availability": 0.10
+  },
+  "metrics": {
+    "total_benchmark_cases": 6,
+    "task_classification_accuracy": 1.0,
+    "routing_accuracy": 1.0,
+    "avg_routing_latency_ms": 1.42,
+    "rejection_consistency_rate": 1.0
+  },
+  "case_evaluations": [
+    {
+      "case_id": "CASE_1_SINGLE_VQA",
+      "query": "Describe the land cover and major objects visible in this image.",
+      "input_type": "SINGLE_IMAGE",
+      "modality": "OPTICAL",
+      "classified_task": "CAPTIONING",
+      "selected_model": "geochat-7b",
+      "routing_score": 0.887,
+      "latency_ms": 1.25,
+      "status": "MATCH"
+    },
+    {
+      "case_id": "CASE_2_GROUNDING",
+      "query": "Highlight the water body referred to in the query.",
+      "input_type": "SINGLE_IMAGE",
+      "modality": "OPTICAL",
+      "classified_task": "GROUNDING",
+      "selected_model": "geochat-7b",
+      "routing_score": 0.885,
+      "latency_ms": 1.18,
+      "status": "MATCH"
+    },
+    {
+      "case_id": "CASE_3_CHANGE_DETECTION",
+      "query": "What changed between these two images?",
+      "input_type": "BI_TEMPORAL",
+      "modality": "OPTICAL",
+      "classified_task": "CHANGE_DETECTION",
+      "selected_model": "changestar",
+      "routing_score": 0.900,
+      "latency_ms": 1.54,
+      "status": "MATCH"
+    },
+    {
+      "case_id": "CASE_4_CHANGE_VQA",
+      "query": "Has the built-up area increased, decreased, or remained unchanged?",
+      "input_type": "BI_TEMPORAL",
+      "modality": "OPTICAL",
+      "classified_task": "CHANGE_VQA",
+      "selected_model": "changestar",
+      "routing_score": 0.900,
+      "latency_ms": 1.49,
+      "status": "MATCH"
+    },
+    {
+      "case_id": "CASE_5_OPTICAL_SAR",
+      "query": "Use the optical and SAR images together to identify built-up and water-covered regions.",
+      "input_type": "OPTICAL_SAR_PAIR",
+      "modality": "OPTICAL_SAR",
+      "classified_task": "OPTICAL_SAR_ANALYSIS",
+      "selected_model": "croma",
+      "routing_score": 0.925,
+      "latency_ms": 1.63,
+      "status": "MATCH"
+    },
+    {
+      "case_id": "CASE_6_CHANGE_SINGLE_IMAGE_REJECTION",
+      "query": "What changed between these two dates?",
+      "input_type": "SINGLE_IMAGE",
+      "modality": "OPTICAL",
+      "classified_task": "CHANGE_DETECTION",
+      "selected_model": null,
+      "is_executable": false,
+      "blocking_issue": "Change analysis requires at least two temporal observations. Please provide the images to compare (e.g. before/after dates).",
+      "latency_ms": 1.43,
+      "status": "MATCH"
+    }
+  ]
+}

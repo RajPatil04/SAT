@@ -1,0 +1,861 @@
+/* SatQuery AI - Atmospheric Earth Observation Light Mission Control Theme */
+:root {
+  --bg-sky-top: #e0f2fe;
+  --bg-sky-bottom: #bfdbfe;
+  --bg-card: #ffffff;
+  --bg-card-glass: rgba(255, 255, 255, 0.94);
+  --border-card: #bae6fd;
+  --border-subtle: #e2e8f0;
+  --border-input: #cbd5e1;
+
+  --accent-blue: #0284c7;
+  --accent-blue-hover: #0369a1;
+  --accent-sky: #38bdf8;
+  --accent-cyan: #06b6d4;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-rose: #f43f5e;
+
+  --text-title: #0f172a;
+  --text-main: #1e293b;
+  --text-muted: #475569;
+  --text-dim: #64748b;
+  --text-cyan: #0284c7;
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #e2effc;
+  background-image: 
+    linear-gradient(135deg, rgba(226, 239, 252, 0.55) 0%, rgba(191, 219, 254, 0.35) 100%),
+    url('/earth_orbit_light.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  outline: none;
+}
+
+/* Floating Satellite Illustration (Exact match to screenshot) */
+.sat-orbiting-satellite {
+  position: fixed;
+  top: 170px;
+  left: 36px;
+  width: 105px;
+  height: auto;
+  pointer-events: none;
+  z-index: 10;
+  filter: drop-shadow(0 4px 10px rgba(2, 132, 199, 0.2));
+  animation: satelliteFloat 6s ease-in-out infinite;
+}
+
+@keyframes satelliteFloat {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-7px) rotate(-1deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+@media (max-width: 1280px) {
+  .sat-orbiting-satellite {
+    display: none;
+  }
+}
+
+/* Mission Control Header */
+.mc-header {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  padding: 12px 36px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.mc-logo-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sat-globe-wrapper {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 12px rgba(2, 132, 199, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sat-globe-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.mc-title-box h1 {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1.2;
+}
+
+.mc-title-box h1 span {
+  color: var(--accent-blue);
+}
+
+.mc-title-box p {
+  font-size: 11.5px;
+  color: #64748b;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.mc-nav {
+  display: flex;
+  gap: 10px;
+  background: transparent;
+  padding: 0;
+  border: none;
+}
+
+.mc-nav-btn {
+  background: rgba(255, 255, 255, 0.95);
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.mc-nav-btn:hover:not(.active) {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.mc-nav-btn.active {
+  background: var(--accent-blue);
+  color: #ffffff;
+  border-color: var(--accent-blue);
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+}
+
+.mc-telemetry {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.mc-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.mc-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.5);
+}
+
+/* Main Workspace Layout */
+.sat-workspace-container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 18px 20px 48px;
+  position: relative;
+  z-index: 20;
+}
+
+/* Card Style (Glassmorphism Light Earth Theme) */
+.sat-card {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid #bae6fd;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px -5px rgba(14, 165, 233, 0.1), 0 4px 12px rgba(0, 0, 0, 0.03);
+  padding: 20px 22px;
+  margin-bottom: 20px;
+}
+
+/* Mode Switcher Tabs */
+.sat-mode-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.sat-mode-btn {
+  background: #ffffff;
+  border: 1.5px solid #bae6fd;
+  color: #0369a1;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.sat-mode-btn:hover {
+  background: #f0f9ff;
+  border-color: #7dd3fc;
+}
+
+.sat-mode-btn.active {
+  background: var(--accent-blue);
+  color: #ffffff;
+  border-color: var(--accent-blue);
+  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.3);
+}
+
+.sat-mode-icon {
+  font-size: 15px;
+}
+
+/* Two-Column Balanced Grid Layout */
+.sat-input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  align-items: stretch;
+}
+
+.sat-grid-col {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Metadata Badge in Image Slots */
+.sat-metadata-pill {
+  font-size: 11px;
+  font-weight: 600;
+  background: #e0f2fe;
+  color: #0284c7;
+  padding: 2px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+}
+
+/* Upload Slots */
+.sat-upload-slot {
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 10px;
+  background: #f8fafc;
+  height: 165px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.sat-upload-slot:hover {
+  border-color: var(--accent-blue);
+  background: #f0f9ff;
+}
+
+.sat-upload-slot.has-image {
+  border-style: solid;
+  border-color: #cbd5e1;
+  background: #f8fafc;
+  padding: 0;
+}
+
+.sat-upload-slot.drag-active {
+  border-color: var(--accent-blue);
+  background: #e0f2fe;
+}
+
+.sat-preview-img {
+  width: 100%;
+  height: calc(100% - 24px);
+  object-fit: cover;
+  display: block;
+}
+
+.sat-file-name {
+  width: 100%;
+  height: 24px;
+  line-height: 24px;
+  font-size: 11px;
+  color: #475569;
+  background: #f1f5f9;
+  border-top: 1px solid #e2e8f0;
+  text-align: center;
+  padding: 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.sat-remove-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  z-index: 5;
+}
+
+.sat-remove-btn:hover {
+  background: #ffffff;
+  color: #ef4444;
+  border-color: #fca5a5;
+  transform: scale(1.1);
+}
+
+.sat-array-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100% - 24px);
+  gap: 4px;
+}
+
+/* Validation Advisory Alert (Yellow / Amber card) */
+.sat-validation-advisory {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 10px;
+}
+
+.sat-validation-advisory-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #b45309;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 3px;
+}
+
+.sat-validation-advisory-item {
+  font-size: 11.5px;
+  color: #78350f;
+  line-height: 1.45;
+}
+
+/* Query Input Section */
+.sat-query-textarea {
+  width: 100%;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13.5px;
+  color: #0f172a;
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+  transition: all 0.2s ease;
+}
+
+.sat-query-textarea:focus {
+  border-color: var(--accent-blue);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+}
+
+.sat-example-pill {
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  color: #1d4ed8;
+  padding: 5px 12px;
+  border-radius: 16px;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.sat-example-pill:hover {
+  background: #dbeafe;
+  border-color: #bfdbfe;
+  color: #1e40af;
+}
+
+/* Action Button */
+.sat-analyze-btn {
+  background: var(--accent-blue);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 14px;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+  transition: all 0.2s ease;
+}
+
+.sat-analyze-btn:hover:not(:disabled) {
+  background: var(--accent-blue-hover);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.45);
+  transform: translateY(-1px);
+}
+
+.sat-analyze-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Analysis Result Card */
+.sat-result-card {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid #bae6fd;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px -5px rgba(14, 165, 233, 0.1), 0 4px 12px rgba(0, 0, 0, 0.03);
+  padding: 20px 24px;
+  margin-top: 20px;
+}
+
+.sat-result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sat-result-heading {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Badges in Result Header (Exact to screenshot) */
+.sat-badge-pill {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sat-badge-cyan {
+  background: #cffafe;
+  border: 1px solid #7dd3fc;
+  color: #0369a1;
+}
+
+.sat-badge-cyan:hover {
+  background: #a5f3fc;
+}
+
+.sat-badge-green {
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  color: #047857;
+}
+
+.sat-badge-blue {
+  background: #e0f2fe;
+  border: 1px solid #bae6fd;
+  color: #0284c7;
+}
+
+.sat-badge-gray {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+}
+
+/* Result Answer Body */
+.sat-answer-body {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: #1e293b;
+  margin-bottom: 12px;
+}
+
+/* Limitations Box */
+.sat-limitations-box {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: #92400e;
+  margin-top: 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.5;
+}
+
+/* Evidence and Visual Previews */
+.sat-evidence-section {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.sat-evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.sat-evidence-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sat-evidence-item.highlight-map {
+  border-color: #0284c7;
+  box-shadow: 0 0 12px rgba(2, 132, 199, 0.15);
+}
+
+.sat-evidence-img-wrap {
+  width: 100%;
+  height: 140px;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.sat-evidence-img-wrap img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.sat-evidence-label {
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+}
+
+.sat-evidence-failed-msg {
+  padding: 12px;
+  text-align: center;
+  color: #64748b;
+  font-size: 11px;
+}
+
+/* Instruction Banner */
+.sat-instruction-banner {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1.5px solid #bae6fd;
+  border-radius: 14px;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.08);
+  margin-top: 16px;
+}
+
+.sat-instruction-icon {
+  font-size: 26px;
+}
+
+.sat-instruction-text {
+  font-size: 13.5px;
+  color: #334155;
+  font-weight: 500;
+  flex: 1;
+}
+
+.sat-link-btn {
+  background: transparent;
+  color: var(--accent-blue);
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sat-link-btn:hover {
+  text-decoration: underline;
+  color: var(--accent-blue-hover);
+}
+
+/* Loading and Error States */
+.sat-loading-card {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1.5px solid #bae6fd;
+  border-radius: 16px;
+  padding: 36px 24px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(14, 165, 233, 0.1);
+  margin-top: 16px;
+}
+
+.sat-loading-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-top: 14px;
+}
+
+.sat-loading-subtitle {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.sat-error-card {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 14px;
+  padding: 18px 22px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.sat-error-icon {
+  font-size: 22px;
+}
+
+.sat-error-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #991b1b;
+  margin-bottom: 4px;
+}
+
+.sat-error-message {
+  font-size: 13px;
+  color: #7f1d1d;
+  margin-bottom: 12px;
+}
+
+.sat-retry-btn {
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.25);
+}
+
+.sat-retry-btn:hover {
+  background: #dc2626;
+}
+
+/* Advanced Details Toggle Button */
+.sat-advanced-btn {
+  background: rgba(255, 255, 255, 0.9);
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.sat-advanced-btn:hover {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: #94a3b8;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.sat-badge-subtle {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #64748b;
+}
+
+/* Spinner */
+.mc-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(2, 132, 199, 0.2);
+  border-top-color: var(--accent-blue);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+
+.sat-large-spinner {
+  width: 36px;
+  height: 36px;
+  border-width: 3px;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Advanced Panel Card Overrides (Light styling for telemetry) */
+.sat-advanced-panel .mc-card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  color: #1e293b;
+}
+
+.sat-advanced-panel .mc-card-title {
+  color: #0f172a;
+}
+
+.sat-advanced-panel .mc-card-header {
+  border-bottom-color: #e2e8f0;
+}
+
+.mc-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mc-badge-cyan { background: #cffafe; color: #0369a1; border: 1px solid #7dd3fc; }
+.mc-badge-blue { background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; }
+.mc-badge-green { background: #dcfce7; color: #047857; border: 1px solid #86efac; }
+.mc-badge-amber { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+.mc-badge-rose { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+.mc-badge-muted { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+
+/* Responsive Adjustments */
+@media (max-width: 860px) {
+  .sat-input-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .sat-workspace-container {
+    padding: 10px 14px 36px;
+  }
+  .sat-card {
+    padding: 16px;
+  }
+  .mc-header {
+    padding: 10px 16px;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .mc-nav {
+    width: 100%;
+  }
+  .mc-nav-btn {
+    flex: 1;
+    justify-content: center;
+  }
+}
